@@ -33,7 +33,7 @@ export 'scr/state.dart';
 
 ///[Countries] list of Countries informations.
 ///
-///[iso_3166_1_alpha2], [iso_3166_1_alpha3], [iso_3166_1_numeric], [name], [natives], [translations], [alt_spellings], [tld], [cioc], [status], [unMember], 
+///[iso_3166_1_alpha2], [iso_3166_1_alpha3], [iso_3166_1_numeric], [name], [natives], [translations], [alt_spellings], [tld], [cioc], [status], [unMember],
 ///[currencies], [dialling], [capital], [geographical], [flag_symbol], [languages], [population], [extra], [states],[vat_rates], [cities]
 final List<Country> Countries = [];
 
@@ -75,6 +75,7 @@ class GetWorld {
 
   Future<void> _initial_Languages() async {
     List<dynamic> data = jsonDecode(await File("./jsons/languages.json").readAsString());
+
     // wirtting main languange informations
     Languages.addAll(data.map((e) => Language(
           iso_639_1_alpha2: e["iso_639_1__alpha2"],
@@ -86,27 +87,14 @@ class GetWorld {
         )));
 
     // writting translations
-    for (Language language in Languages) {
-      for (dynamic c in data) {
-        if (c["iso_639_2__alpha3"] == language.iso_639_2_alpha3 && c["name_in"].length > 0) {
-          Map<Language, List<String>?> eng = {
-            Languages.firstWhere((element) => element.iso_639_2_alpha3 == "ENG"): List<String>.from(c["name_in"]["ENG"])
-          };
-          Map<Language, List<String>?> nld = {
-            Languages.firstWhere((element) => element.iso_639_2_alpha3 == "NLD"): List<String>.from(c["name_in"]["NLD"])
-          };
-          Map<Language, List<String>?> fra = {
-            Languages.firstWhere((element) => element.iso_639_2_alpha3 == "FRA"): List<String>.from(c["name_in"]["FRA"])
-          };
-
-          language.name_in!.addAll(eng);
-          language.name_in!.addAll(nld);
-          language.name_in!.addAll(fra);
-        }
-      }
+    for (var e in Languages) {
+      e.name_in = Map<Language, List<String>?>.from(data
+          .firstWhere((source) => source["iso_639_2__alpha3"] == e.iso_639_2_alpha3)["name_in"]
+          .map((key, value) => MapEntry<Language, List<String>?>(
+              Languages.firstWhere((element) => element.iso_639_2_alpha3 == key), List<String>.from(value))));
     }
-    print("languanges");
-    developer.log("Languages initialized", name: "GetWorld");
+
+    developer.log("Languages initialized with ${Languages.length} object(s)", name: "GetWorld");
   }
 
   Future<void> _initial_Currency() async {
@@ -124,8 +112,7 @@ class GetWorld {
           symbol: currency["symbol"],
           symbol_native: currency["symbol_native"],
         ))));
-    print("currencies");
-    developer.log("Currencies initialized", name: "GetWorld");
+    developer.log("Currencies initialized with ${Currencies.length} object(s)", name: "GetWorld");
   }
 
   Future<void> _initialCountries(
@@ -165,20 +152,24 @@ class GetWorld {
     //Fill borders
     for (var country in Countries) {
       country.geographical!.borders = data
-          .singleWhere((element) => element["iso_3166_1_alpha3"] == country.iso_3166_1_alpha3)["geographical"]["borders"]
+          .singleWhere((element) => element["iso_3166_1_alpha3"] == country.iso_3166_1_alpha3)["geographical"]
+              ["borders"]
           .map<Country>((b) => Countries.singleWhere((c) => c.iso_3166_1_alpha3 == b))
           .toList();
     }
-    print("Countries");
-    developer.log("Countries initialized with ${Countries.length} country", name: "GetWorld");
+    developer.log("Countries initialized with ${Countries.length} object(s)", name: "GetWorld");
   }
 
   List<Currency>? _Currencies(country) {
-    return country["currencies"].map<Currency>((cur) => Currencies.singleWhere((element) => element.iso_4217_code == cur)).toList();
+    return country["currencies"]
+        .map<Currency>((cur) => Currencies.singleWhere((element) => element.iso_4217_code == cur))
+        .toList();
   }
 
   List<Language>? _Languages(country) {
-    return country["languages"].map<Language>((lan) => Languages.singleWhere((element) => element.iso_639_2_alpha3 == lan)).toList();
+    return country["languages"]
+        .map<Language>((lan) => Languages.singleWhere((element) => element.iso_639_2_alpha3 == lan))
+        .toList();
   }
 
   List<State>? _States_Cities(country, [bool cities = true]) {
@@ -204,9 +195,9 @@ class GetWorld {
 
   Map<Language, Name>? _translations(dynamic country) {
     if (country == null || Languages.isEmpty) return null;
-    return Map<Language, Name>.from(country["translations"].map<Language, Name>((key, value) => MapEntry<Language, Name>(
-        Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),
-        Name(official: value["official"], common: value["common"]))));
+    return Map<Language, Name>.from(country["translations"].map<Language, Name>((key, value) =>
+        MapEntry<Language, Name>(Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),
+            Name(official: value["official"], common: value["common"]))));
   }
 
   Map<Language, Name>? _Natives(dynamic country) {
@@ -217,7 +208,9 @@ class GetWorld {
   }
 
   Dialling _Dialling(country) {
-    return Dialling(calling_code: country["dialling"]["calling_code"], national_number_lengths: country["dialling"]["national_number_lengths"]);
+    return Dialling(
+        calling_code: country["dialling"]["calling_code"],
+        national_number_lengths: country["dialling"]["national_number_lengths"]);
   }
 
   Population _Population(country) {
@@ -250,16 +243,23 @@ class GetWorld {
       ar5: country["extra"]["ar5"].toString(),
       address_format: country["extra"]["address_format"],
       eu_member: country["extra"]["eu_member"].toString(),
-      // vat_rates: c["extra"]["vat_rates"]      <- need to filed
     );
   }
 
   Geographical _Geographical(dynamic country) {
     return Geographical(
-      latLng_dmc: LatLng(latitude: country["geographical"]["latLng_dmc"]["latitude"], longitude: country["geographical"]["latLng_dmc"]["longitude"]),
-      latLng_dec: LatLng(latitude: country["geographical"]["latLng_dec"]["latitude"], longitude: country["geographical"]["latLng_dec"]["longitude"]),
-      latLng_max: LatLng(latitude: country["geographical"]["latLng_min"]["latitude"], longitude: country["geographical"]["latLng_min"]["longitude"]),
-      latLng_min: LatLng(latitude: country["geographical"]["latLng_max"]["latitude"], longitude: country["geographical"]["latLng_max"]["longitude"]),
+      latLng_dmc: LatLng(
+          latitude: country["geographical"]["latLng_dmc"]["latitude"],
+          longitude: country["geographical"]["latLng_dmc"]["longitude"]),
+      latLng_dec: LatLng(
+          latitude: country["geographical"]["latLng_dec"]["latitude"],
+          longitude: country["geographical"]["latLng_dec"]["longitude"]),
+      latLng_max: LatLng(
+          latitude: country["geographical"]["latLng_min"]["latitude"],
+          longitude: country["geographical"]["latLng_min"]["longitude"]),
+      latLng_min: LatLng(
+          latitude: country["geographical"]["latLng_max"]["latitude"],
+          longitude: country["geographical"]["latLng_max"]["longitude"]),
       area: country["geographical"]["area"].toDouble(),
       region: country["geographical"]["region"],
       subregion: country["geographical"]["subregion"],
@@ -275,17 +275,22 @@ class GetWorld {
     );
   }
 
-  void writeJsonFile(String path, Object object) {
-    final File file = File(path);
-    file.writeAsStringSync(json.encode(object));
-    print("${object.runtimeType} exported at $path");
-  }
+  // void _writeJsonFile(String path, Object object) {
+  //   final File file = File(path);
+  //   file.writeAsStringSync(json.encode(object));
+  //   print("${object.runtimeType} exported at $path");
+  // }
+  // void _printJson(Object object) {
+  //   print(JsonEncoder.withIndent("  ").convert(object));
+  // }
 
-  void printJson(Object object) {
-    print(JsonEncoder.withIndent("  ").convert(object));
-  }
 
-  void unitialize() {
-    print("XCountires is unitialized");
-  }
+
 }
+extension NumberParsing on Currency {
+  String parseInt() {
+    return  iso_4217_code;
+  }
+  // ···
+}
+

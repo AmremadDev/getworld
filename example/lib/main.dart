@@ -1,5 +1,4 @@
-
-import '../../lib/getworld.dart';
+import 'package:getworld/getworld.dart';
 
 void main() async  {
    await GetWorld().initialize();

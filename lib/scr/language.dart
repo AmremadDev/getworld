@@ -19,7 +19,7 @@ class Language {
   String? wikiUrl;
 
   ///
-  Map<Language, List<String>?>? name_in;
+  Map<Language, List<String>?>? name_in ={};
 
   Language({
     this.iso_639_1_alpha2,

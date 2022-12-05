@@ -20,7 +20,7 @@ With Flutter:
 This will add a line like this to your package's pubspec.yaml (and run an implicit  `dart pub get`):
 ```yaml
 dependencies:
-  getworld: ^1.0.0
+  getworld: ^1.0.1
 ```
 Alternatively, your editor might support  `dart pub get`  or  `flutter pub get`. Check the docs for your editor to learn more.
 ### Import it
