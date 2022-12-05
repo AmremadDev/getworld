@@ -1,6 +1,9 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AmremadDev/getworld/master/logo/Capture.JPG" alt="Sublime's custom image"/>
+</p>
+
 # getworld
-Simple package for getting countries, currenices and languages data.
-## Getting started
+Simple package for getting countries, currenices and languages information.
 
 ## Installation
 
@@ -19,13 +22,9 @@ This will add a line like this to your package's pubspec.yaml (and run an implic
 dependencies:
   getworld: ^1.0.0
 ```
-
 Alternatively, your editor might support  `dart pub get`  or  `flutter pub get`. Check the docs for your editor to learn more.
-
 ### Import it
-
 Now in your Dart code, you can use:
-
 ```dart
 import 'package:getworld/getworld.dart';
 ```
