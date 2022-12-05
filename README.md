@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AmremadDev/getworld/master/logo/Capture.JPG" alt="Sublime's custom image"/>
+  <img src="https://github.com/AmremadDev/getworld/blob/master/logo/logo.png?raw=true" alt="Sublime's custom image"/>
 </p>
 
 # getworld
