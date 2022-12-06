@@ -1,8 +1,8 @@
 ## 1.0.0
 
 - Testing version.
-<!-- - Initial version. -->
 
-## 1.0.1
 
-- Initial version.
+<!-- ## 1.0.1
+
+- Initial version. -->

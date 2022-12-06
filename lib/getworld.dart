@@ -4,7 +4,8 @@ library getworld;
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:io';
-import 'dart:isolate';
+import 'package:getworld/data/curriences.dart';
+import 'package:getworld/data/data_compact.dart';
 import 'package:getworld/data/languages.dart';
 
 import 'scr/city.dart';
@@ -20,6 +21,7 @@ import 'scr/name.dart';
 import 'scr/population.dart';
 import 'scr/state.dart';
 
+export 'scr/country.dart';
 export 'scr/city.dart';
 export 'scr/currency.dart';
 export 'scr/dialling.dart';
@@ -32,6 +34,7 @@ export 'scr/language.dart';
 export 'scr/extra.dart';
 export 'scr/population.dart';
 export 'scr/state.dart';
+export 'extensions.dart';
 
 ///[Countries] list of Countries informations.
 ///
@@ -49,7 +52,7 @@ class GetWorld {
   static bool _loaded = false;
 
   ///[initialize] You  need to call this method if you need to initialize lists.
-  Future<void> initialize({
+  void initialize({
     bool countires = true,
     bool currencies = true,
     bool languages = true,
@@ -61,36 +64,24 @@ class GetWorld {
     bool geographical = true,
     bool states = true,
     bool cities = true,
-  }) async {
+  }) {
     assert(!(states == false && cities == true), "getting cities need states to be true");
     if (_loaded == false) {
-      if (languages == true) await _initial_Languages();
-      // if (currencies == true) await _initial_Currency();
-      // if (countires == true) await _initialCountries();
+      if (languages == true) _initial_Languages();
+      if (currencies == true) _initial_Currency();
+      if (countires == true) _initialCountries();
 
       developer.log("GetWorld initialized", name: "GetWorld");
       _loaded = true;
     } else {
       assert(_loaded != true, "GetWorld is aready intialized");
     }
-
-    // getPath();
   }
 
-  //   Future<String> getPath() async {
-
-  //   Uri? future = await Isolate.resolvePackageUri(Uri.parse('package:getworld/'));
-  //   print(future?.path.substring(1, future.path.length-4));
-  //   // bool value =  await File(future!.path.substring(1)).exists();
-  //   // print(value);
-  //   return (future!.path.substring(1, future.path.length-4));
-
-  // }
-
-  Future<void> _initial_Languages() async {
+  void _initial_Languages() {
     // List<dynamic> data = jsonDecode(await File("packages/getworld/jsons/languages.json").readAsString());
+    List<dynamic> data = jsonDecode(jsonLanguanges());
 
-    List<dynamic> data = jsonDecode(jsonLanguanges);
     // wirtting main languange informations
     Languages.addAll(data.map((e) => Language(
           iso_639_1_alpha2: e["iso_639_1__alpha2"],
@@ -106,14 +97,16 @@ class GetWorld {
       e.name_in = Map<Language, List<String>?>.from(data
           .firstWhere((source) => source["iso_639_2__alpha3"] == e.iso_639_2_alpha3)["name_in"]
           .map((key, value) => MapEntry<Language, List<String>?>(
-              Languages.firstWhere((element) => element.iso_639_2_alpha3 == key), List<String>.from(value))));
+              Languages.firstWhere((element) => element.iso_639_2_alpha3 == key),
+              List<String>.from(value))));
     }
 
     developer.log("Languages initialized with ${Languages.length} object(s)", name: "GetWorld");
   }
 
-  Future<void> _initial_Currency() async {
-    List<dynamic> data = jsonDecode(await File("./jsons/currencies.json").readAsString());
+  void _initial_Currency() {
+    List<dynamic> data = jsonDecode(jsonCurriences());
+    //  List<dynamic> data = jsonDecode(await File("./jsons/currencies.json").readAsString());
     Currencies.addAll(List<Currency>.from(data.map((currency) => Currency(
           iso_4217_code: currency["iso_4217_code"],
           iso_4217_numeric: currency["iso_4217_numeric"].toString(),
@@ -130,16 +123,16 @@ class GetWorld {
     developer.log("Currencies initialized with ${Currencies.length} object(s)", name: "GetWorld");
   }
 
-  Future<void> _initialCountries(
+  void _initialCountries(
       [bool alt_spellings = true,
       bool dialling = true,
       bool population = true,
       bool extra = true,
       bool geographical = true,
       bool states = true,
-      bool cities = true]) async {
-    List<dynamic> data = jsonDecode(await File("./jsons/data_compact.json").readAsString());
-
+      bool cities = true]) {
+    // List<dynamic> data = jsonDecode(await File("./jsons/data_compact.json").readAsString());
+    List<dynamic> data = jsonDecode(jsonCountries());
     Countries.addAll(data
         .map((country) => Country(
             iso_3166_1_alpha2: country["iso_3166_1_alpha2"],
@@ -148,7 +141,8 @@ class GetWorld {
             cioc: country["cioc"],
             name: _Name(country),
             natives: _Natives(country),
-            alt_spellings: (alt_spellings == false) ? null : List<String>.from(country["alt_spellings"]),
+            alt_spellings:
+                (alt_spellings == false) ? null : List<String>.from(country["alt_spellings"]),
             translations: (Languages.isEmpty) ? null : _translations(country),
             capital: List<String>.from(country["capital"]),
             unMember: country["unMember"],
@@ -167,8 +161,8 @@ class GetWorld {
     //Fill borders
     for (var country in Countries) {
       country.geographical!.borders = data
-          .singleWhere((element) => element["iso_3166_1_alpha3"] == country.iso_3166_1_alpha3)["geographical"]
-              ["borders"]
+          .singleWhere((element) => element["iso_3166_1_alpha3"] == country.iso_3166_1_alpha3)[
+              "geographical"]["borders"]
           .map<Country>((b) => Countries.singleWhere((c) => c.iso_3166_1_alpha3 == b))
           .toList();
     }
@@ -211,15 +205,17 @@ class GetWorld {
   Map<Language, Name>? _translations(dynamic country) {
     if (country == null || Languages.isEmpty) return null;
     return Map<Language, Name>.from(country["translations"].map<Language, Name>((key, value) =>
-        MapEntry<Language, Name>(Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),
+        MapEntry<Language, Name>(
+            Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),
             Name(official: value["official"], common: value["common"]))));
   }
 
   Map<Language, Name>? _Natives(dynamic country) {
     if (country == null || Languages.isEmpty) return null;
-    return Map<Language, Name>.from(country["natives"].map<Language, Name>((key, value) => MapEntry<Language, Name>(
-        Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),
-        Name(official: value["official"], common: value["common"]))));
+    return Map<Language, Name>.from(country["natives"].map<Language, Name>((key, value) =>
+        MapEntry<Language, Name>(
+            Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),
+            Name(official: value["official"], common: value["common"]))));
   }
 
   Dialling _Dialling(country) {
@@ -229,7 +225,9 @@ class GetWorld {
   }
 
   Population _Population(country) {
-    return Population(count: country["population"]["count"], worldPercentage: country["population"]["worldPercentage"]);
+    return Population(
+        count: country["population"]["count"],
+        worldPercentage: country["population"]["worldPercentage"]);
   }
 
   Name _Name(dynamic country) {
@@ -285,7 +283,8 @@ class GetWorld {
       landlocked: country["geographical"]["landlocked"],
       independent: country["geographical"]["independent"],
       continent: country["geographical"]["continent"]
-          .map<Continents>((element) => Continents.values.singleWhere((continent) => element == continent.value))
+          .map<Continents>(
+              (element) => Continents.values.singleWhere((continent) => element == continent.value))
           .toList(),
     );
   }
@@ -299,11 +298,4 @@ class GetWorld {
   //   print(JsonEncoder.withIndent("  ").convert(object));
   // }
 
-}
-
-extension NumberParsing on Currency {
-  String parseInt() {
-    return iso_4217_code;
-  }
-  // ···
 }
