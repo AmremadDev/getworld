@@ -1,6 +1,6 @@
 name: getworld
 description:  A dart package to get countries, languages and currencies data.
-version: 1.0.1
+version: 1.0.0
 homepage: https://https://github.com/AmremadDev/getworld
 
 environment:
