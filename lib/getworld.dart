@@ -4,6 +4,8 @@ library getworld;
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:io';
+import 'dart:isolate';
+import 'package:getworld/data/languages.dart';
 
 import 'scr/city.dart';
 import 'scr/country.dart';
@@ -63,19 +65,32 @@ class GetWorld {
     assert(!(states == false && cities == true), "getting cities need states to be true");
     if (_loaded == false) {
       if (languages == true) await _initial_Languages();
-      if (currencies == true) await _initial_Currency();
-      if (countires == true) await _initialCountries();
+      // if (currencies == true) await _initial_Currency();
+      // if (countires == true) await _initialCountries();
 
       developer.log("GetWorld initialized", name: "GetWorld");
       _loaded = true;
     } else {
       assert(_loaded != true, "GetWorld is aready intialized");
     }
+
+    // getPath();
   }
 
-  Future<void> _initial_Languages() async {
-    List<dynamic> data = jsonDecode(await File("./jsons/languages.json").readAsString());
+  //   Future<String> getPath() async {
 
+  //   Uri? future = await Isolate.resolvePackageUri(Uri.parse('package:getworld/'));
+  //   print(future?.path.substring(1, future.path.length-4));
+  //   // bool value =  await File(future!.path.substring(1)).exists();
+  //   // print(value);
+  //   return (future!.path.substring(1, future.path.length-4));
+
+  // }
+
+  Future<void> _initial_Languages() async {
+    // List<dynamic> data = jsonDecode(await File("packages/getworld/jsons/languages.json").readAsString());
+
+    List<dynamic> data = jsonDecode(jsonLanguanges);
     // wirtting main languange informations
     Languages.addAll(data.map((e) => Language(
           iso_639_1_alpha2: e["iso_639_1__alpha2"],
@@ -284,13 +299,11 @@ class GetWorld {
   //   print(JsonEncoder.withIndent("  ").convert(object));
   // }
 
-
-
 }
+
 extension NumberParsing on Currency {
   String parseInt() {
-    return  iso_4217_code;
+    return iso_4217_code;
   }
   // ···
 }
-
