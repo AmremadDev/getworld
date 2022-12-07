@@ -67,8 +67,6 @@ extension CountriesExtensions on List<Country> {
     return list;
   }
 
-
-  
   List<Country>? startDialCode(String code) {
     return where((element) => element.dialling!.calling_code.toLowerCase().startsWith(code.toLowerCase())).toList();
   }
@@ -77,8 +75,12 @@ extension CountriesExtensions on List<Country> {
     return where((element) => element.dialling!.calling_code.toLowerCase() == code.toLowerCase()).toList();
   }
 
-    List<Country>? containDialCode(String code) {
+  List<Country>? containDialCode(String code) {
     return where((element) => element.dialling!.calling_code.toLowerCase() == code.toLowerCase()).toList();
   }
 
+
+
 }
+
+

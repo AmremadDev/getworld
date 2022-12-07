@@ -6,7 +6,7 @@ void main() {
   GetWorld().initialize();
   print('GetWorld().initialize() executed in ${stopwatch.elapsed.inMilliseconds} Milliseconds');
 
-
+ 
   stopwatch.reset();
   Countries.equalDialCode("+2")?.forEach((element) {
     print(element.name);

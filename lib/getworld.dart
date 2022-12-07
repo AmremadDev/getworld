@@ -3,7 +3,6 @@ library getworld;
 
 import 'dart:convert';
 import 'dart:developer' as developer;
-import 'dart:io';
 import 'package:getworld/data/curriences.dart';
 import 'package:getworld/data/data_compact.dart';
 import 'package:getworld/data/languages.dart';
