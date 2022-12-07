@@ -53,6 +53,6 @@ class Currency {
         "decimal_digits": decimal_digits,
         "rounding": rounding,
         "name_plural": name_plural,
-        "withdrawal_date": withdrawal_date,
+        "withdrawal_date": withdrawal_date
       };
 }

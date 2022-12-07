@@ -12,6 +12,6 @@ class LatLng {
 
   Map toJson() => {
         "latitude": latitude,
-        "longitude": longitude,
+        "longitude": longitude
       };
 }

@@ -27,8 +27,14 @@ class Name {
   //     return Name(official: translations![lang]["official"], common: translations![lang]["common"]);
   // }
 
+  @override
+  String toString() {
+    
+    return "{official: $official, common: $common}";
+  }
+
   Map toJson() => {
         "official": official,
-        "common": common,
+        "common": common
       };
 }

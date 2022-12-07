@@ -8,4 +8,6 @@ environment:
 
 dev_dependencies:
   lints: ^2.0.0
+dependencies:
+  collection: ^1.17.0
 

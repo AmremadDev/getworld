@@ -9,6 +9,6 @@ class Dialling {
 
   Map toJson() => {
         "calling_code": calling_code,
-        "national_number_lengths": national_number_lengths,
+        "national_number_lengths": national_number_lengths
       };
 }

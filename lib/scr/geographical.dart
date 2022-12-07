@@ -55,6 +55,6 @@ class Geographical {
         "latLng_dec": latLng_dec?.toJson(),
         "latLng_min": latLng_min?.toJson(),
         "latLng_max": latLng_max?.toJson(),
-        "continent": continent?.map((e) => e.value).toList(),
+        "continent": continent?.map((e) => e.value).toList()
       };
 }

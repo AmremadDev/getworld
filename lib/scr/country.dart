@@ -128,6 +128,6 @@ class Country {
         "languages": List<String>.from(languages!.map((e) => e.iso_639_2_alpha3)),
         "population": population?.toJson(),
         "extra": extra?.toJson(),
-        "states": states,
+        "states": states
       };
 }
