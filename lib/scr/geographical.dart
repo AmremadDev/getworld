@@ -5,7 +5,7 @@ import 'latlng.dart';
 
 class Geographical {
   bool? postal_code;
-  LatLng? latLng_dmc;
+  LatLng? latLng_dms;
   LatLng? latLng_dec;
   LatLng? latLng_min;
   LatLng? latLng_max;
@@ -33,7 +33,7 @@ class Geographical {
     this.landlocked,
     this.borders,
     this.independent,
-    this.latLng_dmc,
+    this.latLng_dms,
     this.latLng_dec,
     this.latLng_min,
     this.latLng_max,
@@ -51,7 +51,7 @@ class Geographical {
         "landlocked": landlocked,
         "borders": borders?.map((e) => e?.iso_3166_1_alpha3).toList(),
         "independent": independent,
-        "latLng_dmc": latLng_dmc?.toJson(),
+        "latLng_dmc": latLng_dms?.toJson(),
         "latLng_dec": latLng_dec?.toJson(),
         "latLng_min": latLng_min?.toJson(),
         "latLng_max": latLng_max?.toJson(),

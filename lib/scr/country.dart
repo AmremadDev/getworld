@@ -45,7 +45,7 @@ class Country {
   final List<String>? alt_spellings;
 
   ///Country code top-level domain
-  List<String>? tld;
+  List<String>? tld = [];
 
   ///International Olympic Committee code.
   String? cioc;
@@ -80,33 +80,36 @@ class Country {
   Extra? extra;
 
   ///
-  List<State?>? states;
+  List<Province?>? provinces;
 
   ///
   VATrate? vat_rates;
-  Country({
-    required this.iso_3166_1_alpha2,
-    required this.iso_3166_1_alpha3,
-    required this.iso_3166_1_numeric,
-    required this.name,
-    this.natives,
-    this.translations,
-    this.alt_spellings,
-    this.cioc,
-    this.status,
-    this.capital,
-    this.tld,
-    this.unMember = false,
-    this.currencies,
-    this.dialling,
-    this.geographical,
-    this.flag_symbol,
-    this.languages,
-    this.population,
-    this.extra,
-    this.states,
-    this.vat_rates,
-  });
+
+  ///Relative link to country wikipedia page
+  String? wikiLink = "";
+  Country(
+      {required this.iso_3166_1_alpha2,
+      required this.iso_3166_1_alpha3,
+      required this.iso_3166_1_numeric,
+      required this.name,
+      this.natives,
+      this.translations,
+      this.alt_spellings,
+      this.cioc,
+      this.status,
+      this.capital,
+      this.tld,
+      this.unMember = false,
+      this.currencies,
+      this.dialling,
+      this.geographical,
+      this.flag_symbol,
+      this.languages,
+      this.population,
+      this.extra,
+      this.provinces,
+      this.vat_rates,
+      this.wikiLink});
 
   Map toJson() => {
         "iso_3166_1_alpha2": iso_3166_1_alpha2,
@@ -128,6 +131,6 @@ class Country {
         "languages": List<String>.from(languages!.map((e) => e.iso_639_2_alpha3)),
         "population": population?.toJson(),
         "extra": extra?.toJson(),
-        "states": states
+        "states": provinces
       };
 }

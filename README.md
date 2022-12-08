@@ -6,9 +6,7 @@
 Simple package for getting countries, currenices and languages information.
 
 ## Installation
-
 Run this command:
-
 With Dart:
 ```shell
  $ dart pub add getworld
@@ -60,4 +58,3 @@ Please file feature requests and bugs at the [issue tracker][tracker].
  5.  [**ksafranski/Common-Currency.json**](https://gist.github.com/ksafranski/2973986)
  6. [**CryceTruly/currencies.json**](https://gist.github.com/CryceTruly/3ebce5ed665e027c132de1706a3db990)
  7. [**dr5hn/countries-states-cities-database**](https://github.com/dr5hn/countries-states-cities-database)
- 8. [**country.io**](http://country.io/)

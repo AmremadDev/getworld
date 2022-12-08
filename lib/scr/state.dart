@@ -1,16 +1,16 @@
 
-import 'city.dart';
-import 'latlng.dart';
+import './city.dart';
+import './latlng.dart';
 
 
-class State {
+class Province {
   int? id;
   String? name;
   String? state_code;
   LatLng? latLng;
   String? type;
   List<City>? cities = [];
-  State({
+  Province({
     this.id,
     this.name,
     this.state_code,
@@ -27,6 +27,7 @@ class State {
         "type": type,
         "cities": cities,
       };
+
 //   @override
 //   String toString() {
 //     String indent = "${"          " * 2}";
@@ -41,5 +42,6 @@ class State {
 //     //
 //     return str;
 //   }
+
 }
 

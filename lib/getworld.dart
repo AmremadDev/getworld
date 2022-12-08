@@ -38,7 +38,7 @@ export 'extensions.dart';
 ///[Countries] list of Countries informations.
 ///
 ///[iso_3166_1_alpha2], [iso_3166_1_alpha3], [iso_3166_1_numeric], [name], [natives], [translations], [alt_spellings], [tld], [cioc], [status], [unMember],
-///[currencies], [dialling], [capital], [geographical], [flag_symbol], [languages], [population], [extra], [states],[vat_rates], [cities]
+///[currencies], [dialling], [capital], [geographical], [flag_symbol], [languages], [population], [extra], [provinces],[vat_rates], [cities]
 final List<Country> Countries = [];
 
 ///[Countries] list of Countries Currencies
@@ -156,7 +156,7 @@ class GetWorld {
             geographical: (geographical == false) ? null : _Geographical(country),
             languages: (Languages.isEmpty) ? null : _Languages(country),
             currencies: (Currencies.isEmpty) ? null : _Currencies(country),
-            states: (states == false) ? null : _States_Cities(country, cities)))
+            provinces: (states == false) ? null : _States_Cities(country, cities)))
         .toList());
 
     //Fill borders
@@ -184,9 +184,9 @@ class GetWorld {
         .toList();
   }
 
-  List<State>? _States_Cities(country, [bool cities = true]) {
+  List<Province>? _States_Cities(country, [bool cities = true]) {
     return country["states"]
-        ?.map<State>((s) => State(
+        ?.map<Province>((s) => Province(
               id: s["id"],
               name: s["name"],
               state_code: s["state_code"],
@@ -264,7 +264,7 @@ class GetWorld {
 
   Geographical _Geographical(dynamic country) {
     return Geographical(
-      latLng_dmc: LatLng(
+      latLng_dms: LatLng(
           latitude: country["geographical"]["latLng_dmc"]["latitude"],
           longitude: country["geographical"]["latLng_dmc"]["longitude"]),
       latLng_dec: LatLng(
