@@ -6,37 +6,42 @@
 Simple package for getting countries, currenices and languages information.
 
 ## Table of Contents
-- [getworld](#getworld)
-  - [Table of Contents](#table-of-contents)
-    - [Country Object](#country-object)
-    - [Name Object](#name-object)
-    - [Language Object](#language-object)
-    - [Currency Object](#currency-object)
-    - [Province Object](#province-object)
-    - [City Object](#city-object)
+- [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Country Object](#country-object)
+  - [Language Object](#language-object)
+  - [Currency Object](#currency-object)
+  - [Name Object](#name-object)
+  - [Dialing Object](#dialing-object)
+  - [Province Object](#province-object)
+  - [City Object](#city-object)
   - [Geographical Object](#geographical-object)
-    - [Dialing Object](#dialing-object)
-    - [Extra Object](#extra-object)
-    - [Population Object](#population-object)
-    - [Example: Egypt](#example-egypt)
-  - [Languages Data](#languages-data)
-    - [Data Structure](#data-structure)
-    - [Example: Azerbaijani](#example-azerbaijani)
-    - [Example: Malay](#example-malay)
-    - [Example: Albanian](#example-albanian)
-  - [Anthems Data](#anthems-data)
-    - [Data Structure](#data-structure-1)
-    - [Example: United States](#example-united-states)
-    - [Initial Data Source](#initial-data-source)
+  - [Extra Object](#extra-object)
+  - [Population Object](#population-object)
+  - [Json File Example: Egypt](#json-file-example-egypt)
 
 
+### Installation
+Run this command:
+With Dart:
+```shell
+ $ dart pub add getworld
+```
+With Flutter:
+```shell
+ $ flutter pub add getworld
+```
+This will add a line like this to your package's pubspec.yaml (and run an implicit  `dart pub get`):
+```yaml
+dependencies:
+  getworld: ^1.0.1
+```
+Alternatively, your editor might support  `dart pub get`  or  `flutter pub get`. Check the docs for your editor to learn more.
 
- 
-
-
-  
-
-
+Now in your Dart code, you can use:
+```dart
+import 'package:getworld/getworld.dart';
+```
 
 ### Country Object
 The countries data based on ISO_3166 countries codes.
@@ -59,12 +64,9 @@ The countries data based on ISO_3166 countries codes.
 - ```Country.population```                      -> ```Extra```  object, retrive extra data of country.
 - ```Country.wikiLink```                        -> ```String``` object, relative link to country wikipedia page.
 
-### Name Object
-- ```Name.common```                             -> ```String``` object, common name in english.
-- ```Name.official```                           -> ```String``` object, official name in english.
-
 ### Language Object
-- ```Language.iso_639_1__alpha2```              -> ```String``` object, code iso_639_1 alpha-2.
+The Languages data based on ISO 639-3 languages codes.
+- ```Language.iso_639_1_alpha2```               -> ```String``` object, code iso_639_1 alpha-2.
 - ```Language.iso_639_2_alpha3```               -> ```String``` object, code iso_639_2 alpha-3.
 - ```Language.family```                         -> ```String``` object, language family.
 - ```Language.native```                         -> ```String``` object, native language name.
@@ -84,6 +86,15 @@ The countries data based on ISO_3166 countries codes.
 - ```Currency.name_plural```                    -> ```String``` object,  iso_639_1.
 - ```Currency.withdrawal_date```                -> ```String``` object,  iso_639_1.
 
+
+### Name Object
+- ```Name.common```                             -> ```String``` object, common name in english.
+- ```Name.official```                           -> ```String``` object, official name in english.
+
+### Dialing Object
+- ```Dialing.calling_code```                        -> ```String``` object,  calling code.
+- ```Dialing.national_number_lengths```             -> ```int``` object,  national number lengths.
+
 ### Province Object
 - ```Province.id```                             -> ```String``` object, Code iso_639_1.
 - ```Province.name```                           -> ```String``` object, Code iso_639_1.
@@ -97,7 +108,7 @@ The countries data based on ISO_3166 countries codes.
 - ```City.name```                               -> ```String``` object, Code iso_639_1.
 - ```City.latLng```                             -> ```String``` object, Code iso_639_1.
 
-## Geographical Object
+### Geographical Object
 - ```Geographical.continent```      -> ```Continents`` enumeration object, continents that country lies in.
 - ```Geographical.postal_code```    -> ```LatLng``` object, area postal code
 - ```Geographical.latLng_dms```     -> ```LatLng``` object, coordinate point in **degrees minutes seconds** form.
@@ -114,9 +125,6 @@ The countries data based on ISO_3166 countries codes.
 - ```CGeographical.borders```       -> ```Country``` object, land borders
 - ```Geographical.independent```    -> ```String``` object, independent status.
   
-### Dialing Object
-- ```Dialing.calling_code```                        -> ```String``` object,  calling code.
-- ```Dialing.national_number_lengths```             -> ```int``` object,  national number lengths.
 
 ### Extra Object
 - ```Extra.geonameid``` - Geoname ID
@@ -138,6 +146,7 @@ The countries data based on ISO_3166 countries codes.
 - ```Extra.eu_member``` - European Union Member
 - ```Extra.vat_rates``` - Value-Added Tax.
 - 
+
 ### Population Object
 - ```Population.count```                    -> ```int``` object, population number
 - ```Population.worldPercentage```          -> ```double``` object ,country population of world population percentage
@@ -147,7 +156,7 @@ The countries data based on ISO_3166 countries codes.
 
 
 
-### Example: Egypt
+### Json File Example: Egypt
 ```json
 {
   "IR": {
@@ -298,70 +307,38 @@ The countries data based on ISO_3166 countries codes.
 }
 ```
 
-## Languages Data
-The Languages data based on ISO 639-3 languages codes.
 
-### Data Structure
-- `full` - language full name
-- `speak` (optional)
-    - `isExist` - true if language speaker exist
-    - `optional` - another speaker that speak the language
-    - `speakerGenderRestriction` - Male when Female speaker does not exist
 
-### Example: Azerbaijani
-```json
-{
-  "aze": {
-    "full": "Azerbaijani",
-    "speak": {
-      "isExist": false
-    }
-  }
+
+
+### Design goals and limitations
+While this package provides `getworld` for convenience, as the name implies, the design goal of this package
+is for countires data like codes, names, capitals and geographical info and so on.
+
+ 
+### Usage
+A simple usage example:
+
+```dart
+import  'package:getworld/getworld.dart';
+void  main() async {
+await  GetWorld().initialize();
+print(Countries.length);
+print(Currencies.length);
+print(Languages.length);
 }
 ```
+## Features and bugs
+Please file feature requests and bugs at the [issue tracker][tracker].
+[issue tracker](https://github.com/AmremadDev/getworld/issues)
 
-### Example: Malay
-```json
-{
-  "msa": {
-    "full": "Malay",
-    "speak": {
-      "optional": "eng"
-    }
-  }
-}
-```
 
-### Example: Albanian
-```json
-{
-  "alb": {
-    "full": "Albanian",
-    "speak": {
-      "speakerGenderRestriction": "Male"
-    }
-  }
-}
-```
+### References
 
-## Anthems Data
-The country keys is based on iso_3166_1_alpha2 (a2) countries codes.
-
-### Data Structure
-- `link` - full link to audio file 
-- `source` - link source
-
-### Example: United States
-```json
-{ 
-  "US": {
-    "link": "https://commons.wikimedia.org/wiki/File%3AStar Spangled Banner instrumental.ogg?embedplayer=yes",
-    "source": "wikimedia"
-  }
-}
-```
-
-### Initial Data Source
-Transformed from [countries-data](https://github.com/dormd/countries-data) to json format.
-
-The initial json data is part of [rinvex country](https://github.com/rinvex/country) repository.
+ 1. [**Countries ISO 3166 code**](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes)
+ 2. [**Languages ISO 639**](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+ 3. [**Currencies ISO_4217**](https://en.wikipedia.org/wiki/ISO_4217)
+ 4. [**arash16/countries-languages**](https://github.com/arash16/countries-languages/tree/master/lib)
+ 5.  [**ksafranski/Common-Currency.json**](https://gist.github.com/ksafranski/2973986)
+ 6. [**CryceTruly/currencies.json**](https://gist.github.com/CryceTruly/3ebce5ed665e027c132de1706a3db990)
+ 7. [**dr5hn/countries-states-cities-database**](https://github.com/dr5hn/countries-states-cities-database)
