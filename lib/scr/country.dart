@@ -8,7 +8,7 @@ import 'vat_rate.dart';
 import 'language.dart';
 import 'extra.dart';
 import 'population.dart';
-import 'state.dart';
+import 'province.dart';
 
 class Country {
   ///ISO 3166-1 alpha-2 code.
@@ -80,7 +80,7 @@ class Country {
   Extra? extra;
 
   ///
-  List<Province?>? provinces;
+  List<Province>? provinces;
 
   ///
   VATrate? vat_rates;
@@ -131,6 +131,6 @@ class Country {
         "languages": List<String>.from(languages!.map((e) => e.iso_639_2_alpha3)),
         "population": population?.toJson(),
         "extra": extra?.toJson(),
-        "states": provinces
+         "states": provinces?.map((e) => e.toJson()).toList(),
       };
 }

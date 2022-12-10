@@ -1,9 +1,6 @@
 import 'latlng.dart';
 
 class City {
-  ///City id.
-  int? id;
-
   ///City name.
   String? name;
 
@@ -11,9 +8,8 @@ class City {
   LatLng? latLng;
 
   City({
-    this.id,
     this.name,
     this.latLng,
   });
-  Map toJson() => {"id": id, "name": name, "latLng": latLng?.toJson()};
+  Map toJson() => {"name": name, "latLng": latLng?.toJson()};
 }

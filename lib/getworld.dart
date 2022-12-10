@@ -18,7 +18,7 @@ import 'scr/language.dart';
 import 'scr/latlng.dart';
 import 'scr/name.dart';
 import 'scr/population.dart';
-import 'scr/state.dart';
+import 'scr/province.dart';
 
 export 'scr/country.dart';
 export 'scr/city.dart';
@@ -32,7 +32,7 @@ export 'scr/enums.dart';
 export 'scr/language.dart';
 export 'scr/extra.dart';
 export 'scr/population.dart';
-export 'scr/state.dart';
+export 'scr/province.dart';
 export 'extensions.dart';
 
 ///[Countries] list of Countries informations.
@@ -77,8 +77,6 @@ class GetWorld {
     }
   }
 
-
-  
   void _initial_Languages() {
     // List<dynamic> data = jsonDecode(await File("packages/getworld/jsons/languages.json").readAsString());
     List<dynamic> data = jsonDecode(jsonLanguanges());
@@ -168,7 +166,6 @@ class GetWorld {
           .toList();
     }
 
- 
     developer.log("Countries initialized with ${Countries.length} object(s)", name: "GetWorld");
   }
 
@@ -187,7 +184,6 @@ class GetWorld {
   List<Province>? _States_Cities(country, [bool cities = true]) {
     return country["states"]
         ?.map<Province>((s) => Province(
-              id: s["id"],
               name: s["name"],
               state_code: s["state_code"],
               type: s["type"],
@@ -196,7 +192,6 @@ class GetWorld {
                   ? null
                   : s["cities"]
                       ?.map<City>((c) => City(
-                            id: c["id"],
                             name: c["name"],
                             latLng: LatLng(latitude: c["latitude"], longitude: c["longitude"]),
                           ))

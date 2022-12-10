@@ -57,6 +57,6 @@ class Extra {
         "ar5": ar5,
         "address_format": address_format,
         "eu_member": eu_member,
-        "states": vat_rates
+        "vat_rates": vat_rates
       };
 }
