@@ -4,12 +4,13 @@ library getworld;
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:getworld/data/curriences.dart';
-import 'package:getworld/data/data_compact.dart';
+import 'package:getworld/data/countries.dart';
 import 'package:getworld/data/languages.dart';
 
 import 'scr/city.dart';
 import 'scr/country.dart';
 import 'scr/currency.dart';
+import 'scr/demonym.dart';
 import 'scr/dialling.dart';
 import 'scr/enums.dart';
 import 'scr/extra.dart';
@@ -19,6 +20,7 @@ import 'scr/latlng.dart';
 import 'scr/name.dart';
 import 'scr/population.dart';
 import 'scr/province.dart';
+import 'scr/timezone.dart';
 
 export 'scr/country.dart';
 export 'scr/city.dart';
@@ -35,19 +37,19 @@ export 'scr/population.dart';
 export 'scr/province.dart';
 export 'extensions.dart';
 
-///[Countries] list of Countries informations.
-///
-///[iso_3166_1_alpha2], [iso_3166_1_alpha3], [iso_3166_1_numeric], [name], [natives], [translations], [alt_spellings], [tld], [cioc], [status], [unMember],
-///[currencies], [dialling], [capital], [geographical], [flag_symbol], [languages], [population], [extra], [provinces],[vat_rates], [cities]
-final List<Country> Countries = [];
-
-///[Countries] list of Countries Currencies
-final List<Currency> Currencies = [];
-
-///[Countries] list of Countries Languages
-final List<Language> Languages = [];
-
 class GetWorld {
+  ///[Countries] list of Countries informations.
+  ///
+  ///[iso_3166_1_alpha2], [iso_3166_1_alpha3], [iso_3166_1_numeric], [name], [natives], [translations], [alt_spellings], [tld], [cioc], [status], [unMember],
+  ///[Countries], [dialling], [capital], [geographical], [flag_symbol], [languages], [population], [extra], [provinces],[vat_rates], [cities]
+  static final  List<Country> Countries = [];
+
+  ///[Currencies] list of Countries Currencies
+  static final List<Currency> Currencies = [];
+
+  ///[Languages] list of Countries Languages
+ static final List<Language> Languages = [];
+
   static bool _loaded = false;
 
   ///[initialize] You  need to call this method if you need to initialize lists.
@@ -82,19 +84,19 @@ class GetWorld {
     List<dynamic> data = jsonDecode(jsonLanguanges());
 
     // wirtting main languange informations
-    Languages.addAll(data.map((e) => Language(
-          iso_639_1_alpha2: e["iso_639_1__alpha2"],
-          iso_639_2_alpha3: e["iso_639_2__alpha3"],
-          family: e["family"],
-          name: e["name"],
-          native: e["nativeName"],
-          wikiUrl: e["wikiUrl"],
+    Languages.addAll(data.map((element) => Language(
+          iso_639_1_alpha2: element["iso_639_1_alpha2"],
+          iso_639_2_alpha3: element["iso_639_2_alpha3"],
+          family: element["family"],
+          name: element["name"],
+          native: element["native"],
+          wikiUrl: element["wikiUrl"],
         )));
 
     // writting translations
-    for (var e in Languages) {
-      e.name_in = Map<Language, List<String>?>.from(data
-          .firstWhere((source) => source["iso_639_2__alpha3"] == e.iso_639_2_alpha3)["name_in"]
+    for (var lng in Languages) {
+      lng.name_in = Map<Language, List<String>?>.from(data
+          .firstWhere((source) => source["iso_639_2_alpha3"] == lng.iso_639_2_alpha3)["name_in"]
           .map((key, value) => MapEntry<Language, List<String>?>(
               Languages.firstWhere((element) => element.iso_639_2_alpha3 == key),
               List<String>.from(value))));
@@ -106,18 +108,18 @@ class GetWorld {
   void _initial_Currency() {
     List<dynamic> data = jsonDecode(jsonCurriences());
     //  List<dynamic> data = jsonDecode(await File("./jsons/currencies.json").readAsString());
-    Currencies.addAll(List<Currency>.from(data.map((currency) => Currency(
-          iso_4217_code: currency["iso_4217_code"],
-          iso_4217_numeric: currency["iso_4217_numeric"].toString(),
-          iso_4217_name: currency["iso_4217_name"],
-          iso_4217_minor_unit: currency["iso_4217_minor_unit"],
-          withdrawal_date: currency["withdrawal_date"],
-          decimal_digits: currency["decimal_digits"],
-          full_name: currency["full_name"],
-          name_plural: currency["name_plural"],
-          rounding: currency["rounding"],
-          symbol: currency["symbol"],
-          symbol_native: currency["symbol_native"],
+    Currencies.addAll(List<Currency>.from(data.map((element) => Currency(
+          iso_4217_code: element["iso_4217_code"],
+          iso_4217_numeric: element["iso_4217_numeric"].toString(),
+          iso_4217_name: element["iso_4217_name"],
+          iso_4217_minor_unit: element["iso_4217_minor_unit"],
+          withdrawal_date: element["withdrawal_date"],
+          decimal_digits: element["decimal_digits"],
+          full_name: element["full_name"],
+          name_plural: element["name_plural"],
+          rounding: element["rounding"],
+          symbol: element["symbol"],
+          symbol_native: element["symbol_native"],
         ))));
     developer.log("Currencies initialized with ${Currencies.length} object(s)", name: "GetWorld");
   }
@@ -133,28 +135,46 @@ class GetWorld {
     // List<dynamic> data = jsonDecode(await File("./jsons/data_compact.json").readAsString());
     List<dynamic> data = jsonDecode(jsonCountries());
     Countries.addAll(data
-        .map((country) => Country(
-            iso_3166_1_alpha2: country["iso_3166_1_alpha2"],
-            iso_3166_1_alpha3: country["iso_3166_1_alpha3"],
-            iso_3166_1_numeric: country["iso_3166_1_numeric"],
-            cioc: country["cioc"],
-            name: _Name(country),
-            natives: _Natives(country),
+        .map((element) => Country(
+            iso_3166_1_alpha2: element["iso_3166_1_alpha2"],
+            iso_3166_1_alpha3: element["iso_3166_1_alpha3"],
+            iso_3166_1_numeric: element["iso_3166_1_numeric"],
+            cioc: element["cioc"],
+            name: _Name(element),
+            natives: _Natives(element),
             alt_spellings:
-                (alt_spellings == false) ? null : List<String>.from(country["alt_spellings"]),
-            translations: (Languages.isEmpty) ? null : _translations(country),
-            capital: List<String>.from(country["capital"]),
-            unMember: country["unMember"],
-            status: country["status"],
-            flag_symbol: country["flag_symbol"],
-            tld: List<String>.from(country["tld"]),
-            dialling: (dialling == false) ? null : _Dialling(country),
-            population: (population == false) ? null : _Population(country),
-            extra: (extra == false) ? null : _Extra(country),
-            geographical: (geographical == false) ? null : _Geographical(country),
-            languages: (Languages.isEmpty) ? null : _Languages(country),
-            currencies: (Currencies.isEmpty) ? null : _Currencies(country),
-            provinces: (states == false) ? null : _States_Cities(country, cities)))
+                (alt_spellings == false) ? null : List<String>.from(element["alt_spellings"]),
+              // translations:  _translations(element),
+            capital: List<String>.from(element["capital"]),
+            unMember: element["unMember"],
+            status: element["status"],
+            flag_symbol: element["flag_symbol"],
+            wikiLink: element["wikiLink"],
+            emoji: element["emoji"],
+            emojiU: element["emojiU"] ,
+            demonyms: Demonym(
+            male: element["demonyms"]?.map<Language, String>((k, v) => MapEntry<Language, String>(
+                Languages.firstWhere((e) => e.iso_639_2_alpha3 == k.toUpperCase()),
+                v["m"].toString())),
+            famale: element["demonyms"]?.map<Language, String>((k, v) => MapEntry<Language, String>(
+                Languages.firstWhere((e) => e.iso_639_2_alpha3 == k.toUpperCase()),
+                v["f"].toString()))),
+            timezones:List<TimeZone>.from(element["timezones"].map((t) => TimeZone(
+              zoneName: t["zoneName"],
+              gmtOffset: t["gmtOffset"],
+              gmtOffsetName: t["gmtOffsetName"],
+              tzName: t["tzName"],
+              abbreviation: t["abbreviation"],
+            ))) ,
+            // vat_rates: ,
+            tld: List<String>.from(element["tld"]),
+            dialling: (dialling == false) ? null : _Dialling(element),
+            population: (population == false) ? null : _Population(element),
+            extra: (extra == false) ? null : _Extra(element),
+            geographical: (geographical == false) ? null : _Geographical(element),
+            languages: (Languages.isEmpty) ? null : _Languages(element),
+            currencies: (Currencies.isEmpty) ? null : _Currencies(element),
+            provinces: (states == false) ? null : _States_Cities(element, cities)))
         .toList());
 
     //Fill borders
@@ -202,6 +222,7 @@ class GetWorld {
 
   Map<Language, Name>? _translations(dynamic country) {
     if (country == null || Languages.isEmpty) return null;
+    print(country["translations"].keys);
     return Map<Language, Name>.from(country["translations"].map<Language, Name>((key, value) =>
         MapEntry<Language, Name>(
             Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),

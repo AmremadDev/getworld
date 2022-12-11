@@ -1,13 +1,25 @@
-class VATrate {
+class 
+VATRate {
   double? standard;
-  double? reduced;
+  List<double>? reduced;
   double? super_reduced;
   double? parking;
 
-  VATrate({
+  VATRate({
     this.standard,
     this.reduced,
     this.super_reduced,
     this.parking,
   });
+
+      Map toJson() => {
+        "standard": standard,
+        "reduced": reduced,
+        "super_reduced": super_reduced,
+        "parking": parking,
+    };
 }
+
+
+
+

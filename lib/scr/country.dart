@@ -1,8 +1,10 @@
 import 'currency.dart';
+import 'demonym.dart';
 import 'dialling.dart';
 import 'geographical.dart';
 
 import 'name.dart';
+import 'timezone.dart';
 import 'vat_rate.dart';
 
 import 'language.dart';
@@ -82,34 +84,51 @@ class Country {
   ///
   List<Province>? provinces;
 
+  ///8-bit Unicode Transformation Format
+  String? emoji;
+
+  ///Formal_Unicode_Notation
+  String? emojiU;
+
   ///
-  VATrate? vat_rates;
+  VATRate? vat_rates;
+
+  ///
+  List<TimeZone>? timezones = [];
+
+  ///A name used to denote the inhabitants of a place
+  Demonym? demonyms;
 
   ///Relative link to country wikipedia page
   String? wikiLink = "";
-  Country(
-      {required this.iso_3166_1_alpha2,
-      required this.iso_3166_1_alpha3,
-      required this.iso_3166_1_numeric,
-      required this.name,
-      this.natives,
-      this.translations,
-      this.alt_spellings,
-      this.cioc,
-      this.status,
-      this.capital,
-      this.tld,
-      this.unMember = false,
-      this.currencies,
-      this.dialling,
-      this.geographical,
-      this.flag_symbol,
-      this.languages,
-      this.population,
-      this.extra,
-      this.provinces,
-      this.vat_rates,
-      this.wikiLink});
+  Country({
+    required this.iso_3166_1_alpha2,
+    required this.iso_3166_1_alpha3,
+    required this.iso_3166_1_numeric,
+    required this.name,
+    this.natives,
+    this.translations,
+    this.alt_spellings,
+    this.cioc,
+    this.status,
+    this.capital,
+    this.tld,
+    this.unMember = false,
+    this.currencies,
+    this.dialling,
+    this.geographical,
+    this.flag_symbol,
+    this.languages,
+    this.population,
+    this.extra,
+    this.provinces,
+    this.vat_rates,
+    this.timezones,
+    this.emoji,
+    this.emojiU,
+    this.wikiLink,
+    this.demonyms,
+  });
 
   Map toJson() => {
         "iso_3166_1_alpha2": iso_3166_1_alpha2,
@@ -120,17 +139,23 @@ class Country {
         "natives": natives?.map((key, value) => MapEntry(key.iso_639_2_alpha3, value)),
         "translations": translations?.map((key, value) => MapEntry(key.iso_639_2_alpha3, value)),
         "flag_symbol": flag_symbol,
+        "emoji": emoji,
+        "emojiU": emojiU,
         "cioc": cioc,
         "status": status,
         "capital": capital,
         "tld": tld,
         "unMember": unMember,
+        "timezones": timezones,
+        // "demonyms": demonyms,
         "currencies": List<String>.from(currencies!.map((e) => e.iso_4217_code)),
         "dialling": dialling?.toJson(),
         "geographical": geographical?.toJson(),
         "languages": List<String>.from(languages!.map((e) => e.iso_639_2_alpha3)),
         "population": population?.toJson(),
         "extra": extra?.toJson(),
-         "states": provinces?.map((e) => e.toJson()).toList(),
+        "wikiLink": wikiLink,
+        "vat_rates": vat_rates,
+        // "states": provinces?.map((e) => e.toJson()).toList(),
       };
 }
