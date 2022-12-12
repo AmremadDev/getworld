@@ -1,30 +1,33 @@
 class Currency {
-
-  ///three-letter ISO 4217 currency alpha code
+  ///ISO 4217 currency alpha-3 code
   final String iso_4217_code;
 
-  ///three-number ISO 4217 currency numeric
+  ///ISO 4217 currency numeric
   final String iso_4217_numeric;
 
   ///official ISO 4217 currency name
   final String iso_4217_name;
 
+  ///The smallest unit of a currency, depending on the number of decimals.
   final int? iso_4217_minor_unit;
 
   ///English full name
-  final String? full_name;
+  final String full_name;
 
+  ///Currency symbol.
+  final String symbol;
 
-  final String? symbol;
-  
-  final String? symbol_native;
+  ///Currency native symbol.
+  final String symbol_native;
 
-  final int? decimal_digits;
+  ///Currency decimal_digits.
+  final int decimal_digits;
 
-  final double? rounding;
+  ///Currency Rounding
+  final double rounding;
 
   ///Plural name.
-  final String? name_plural;
+  final String name_plural;
 
   ///Withdrawal date.
   final String? withdrawal_date;

@@ -1,6 +1,8 @@
-
 class Name {
+  ///Official name in english.
   final String official;
+
+  ///Common name in english.
   final String common;
 
   Name({
@@ -10,12 +12,11 @@ class Name {
 
   @override
   String toString() {
-    
     return "{official: $official, common: $common}";
   }
 
   Map toJson() => {
         "official": official,
-        "common": common
+        "common": common,
       };
 }

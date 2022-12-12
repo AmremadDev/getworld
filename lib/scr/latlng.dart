@@ -1,17 +1,17 @@
 class LatLng {
+  ///Latitude coordinate point.
+  String latitude;
 
-  ///Described latitude coordinate point.
-  String? latitude;
-  ///Described longitude coordinate point.
-  String? longitude;
+  ///Longitude coordinate point.
+  String longitude;
 
   LatLng({
-    this.latitude,
-    this.longitude,
+    required this.latitude,
+    required this.longitude,
   });
 
   Map toJson() => {
         "latitude": latitude,
-        "longitude": longitude
+        "longitude": longitude,
       };
 }

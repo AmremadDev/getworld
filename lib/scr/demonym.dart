@@ -1,10 +1,13 @@
-import 'language.dart';
+import './language.dart';
 
 class Demonym {
-  Map<Language, String>? male;
-  Map<Language, String>? female;
+  ///Name of males residents
+  Map<Language, String>? male = {};
 
-  Demonym({this.male, this.female});
+  ///Name of females residents
+  Map<Language, String>? female = {};
+
+  Demonym({required this.male, required this.female});
 
   Map toJson() => {
         "male": male?.map((key, value) => MapEntry(key.iso_639_2_alpha3, value)),

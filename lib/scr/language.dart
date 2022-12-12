@@ -1,36 +1,34 @@
 class Language {
   ///Iso_639_1_alpha2 language code
-  String? iso_639_1_alpha2;
+  final String iso_639_1_alpha2;
 
   ///Iso_639_1_alph32 language code
-  String? iso_639_2_alpha3;
+  final String iso_639_2_alpha3;
 
-  ///
-  String? family;
+  ///Language family
+  final String family;
 
-  ///
-  String? name;
+  ///language name.
+  final String name;
 
-  ///
+  ///Set of all native translation names.
   String? native;
 
-  ///
-  String? wikiUrl;
+  ///Relative link to language wikipedia page.
+  final String wikiUrl;
 
-  ///
+  ///Set of all available translation names.
   Map<Language, List<String>?>? name_in = {};
 
   Language({
-    this.iso_639_1_alpha2,
-    this.iso_639_2_alpha3,
-    this.family,
-    this.name,
+    required this.iso_639_1_alpha2,
+    required this.iso_639_2_alpha3,
+    required this.family,
+    required this.name,
     this.native,
-    this.wikiUrl,
+    required this.wikiUrl,
     this.name_in,
-  }) {
-    name_in = {};
-  }
+  });
 
   Map toJson() => {
         "iso_639_1_alpha2": iso_639_1_alpha2,

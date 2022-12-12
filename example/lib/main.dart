@@ -11,13 +11,13 @@ import 'package:vm_service/vm_service.dart' show MemoryUsage, VM, VmService;
 import 'package:vm_service/vm_service_io.dart' show vmServiceConnectUri;
 
 void main() async {
-  Stopwatch stopwatch = Stopwatch()..start();
+  // Stopwatch stopwatch = Stopwatch()..start();
 
   GetWorld().initialize();
-  print(GetWorld.Countries.toJson());
-  print(GetWorld.Languages);
-  print(GetWorld.Currencies);
- _writeJsonFile (GetWorld.Countries , "d:/countries.json");
+//   print(GetWorld.Countries.toJson());
+//   print(GetWorld.Languages);
+//   print(GetWorld.Currencies);
+//  _writeJsonFile (GetWorld.Countries , "d:/countries.json");
 
 // printHeapUsage();
 // printHeapUsage();

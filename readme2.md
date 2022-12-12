@@ -7,24 +7,27 @@ Simple package for getting countries, currenices and languages information.
 
 ## Table of Contents
 - [Table of Contents](#table-of-contents)
-  - [01. Installation](#installation)
-  - [02. Country Object](#country-object)
-  - [03. Language Object](#language-object)
-  - [04. Currency Object](#currency-object)
-  - [05. Name Object](#name-object)
-  - [06. Dialing Object](#dialing-object)
-  - [07. LatLng Object](#latLng-object)
-  - [08. Province Object](#province-object)
-  - [09. City Object](#city-object)
-  - [10. Geographical Object](#geographical-object)
-  - [11. Extra Object](#extra-object)
-  - [12. Population Object](#population-object)
-  - [13. Json File Example: Egypt](#json-file-example-egypt)
-  - [14. Usage](#usage)
-  - [15. Features and bugs](#features-and-bugs)
-  - [16. References](#references)
+  - [Installation](#installation)
+  - [Country Object](#country-object)
+  - [Language Object](#language-object)
+  - [Currency Object](#currency-object)
+  - [Name Object](#name-object)
+  - [Dialing Object](#dialing-object)
+  - [LatLng Object](#latLng-object)
+  - [Province Object](#province-object)
+  - [City Object](#city-object)
+  - [Geographical Object](#geographical-object)
+  - [Extra Object](#extra-object)
+  - [Population Object](#population-object)
+  - [Demonym Object](#demonym-object)
+  - [TimeZone Object](#time-zone-object)
+  - [VATRate Object](#vat-rate-object)
+  - [Json File Example: Egypt](#json-file-example-egypt)
+  - [Usage](#usage)
+  - [Features and bugs](#features-and-bugs)
+  - [References](#references)
 
-### 01. Installation
+### nstallation
 Run this command:
 With Dart:
 ```shell
@@ -46,7 +49,7 @@ Now in your Dart code, you can use:
 import 'package:getworld/getworld.dart';
 ```
 
-### 02. Country Object
+### Country Object
 The countries data based on ISO_3166 countries codes.
 
 | Object | Type | Description |
@@ -71,19 +74,20 @@ The countries data based on ISO_3166 countries codes.
 |`Country.population`|`Population`|population count and country population of world population percentage.|
 |`Country.wikiLink`|`String`|relative link to country wikipedia page.|
 
-### 03. Language Object
+### Language Object
 The Languages data based on ISO 639-3 languages codes.
 
 | Object | Type | Description |
 |--|--|--|
 |`Language.iso_639_1_alpha2`|`String`|code iso_639_1 alpha-2.|
 |`Language.iso_639_2_alpha3`|`String`|code iso_639_2 alpha-3.|
+|`Language.name`|`String`|language name.|
 |`Language.family`|`String`|language family.|
-|`Language.native`|`String`|set of all available translation names.|
+|`Language.native`|`String`|set of all available native names.|
 |`Language.wikiUrl`|`String`|relative link to language wikipedia page.|
 |`Language.name_in`|`Map<Language, List<String>>`|set of all available translation names.|
 
-### 04. Currency Object
+### Currency Object
 The Currencies data based on ISO 4217 languages codes.
 
 | Object | Type | Description |
@@ -96,29 +100,29 @@ The Currencies data based on ISO 4217 languages codes.
 |`Currency.symbol`|`String`|currency symbol.|
 |`Currency.symbol_native`|`String`|currency native symbol.|
 |`Currency.decimal_digits`|`String`|decimal_digits.|
-|`Currency.rounding`|`String`|code iso_4217_numeric.|
+|`Currency.rounding`|`String`|Currency Rounding.|
 |`Currency.name_plural`|`String`|currency plural name.|
 |`Currency.withdrawal_date`|`String`|date of withdrawal.|
 
-### 05. Name Object
+### Name Object
 | Object | Type | Description |
 |--|--|--|
 |`Name.common`|`String`|common name in english.|
 |`Name.official`|`String`|official name in english.|
 
-### 06. Dialing Object
+### Dialing Object
 | Object | Type | Description |
 |--|--|--|
 |`Dialing.calling_code`|`String`|calling code.|
 |`Dialing.national_number_lengths`|`int`|national number lengths.|
 
-### 07. LatLng Object
+### LatLng Object
 | Object | Type | Description |
 |--|--|--|
 |`LatLng.latitude`|`String`|latitude coordinate point.|
 |`LatLng.longitude`|`String`|longitude coordinate point.|
 
-### 08. Province Object
+### Province Object
 | Object | Type | Description |
 |--|--|--|
 |`Province.id`|`int`|.|
@@ -128,14 +132,14 @@ The Currencies data based on ISO 4217 languages codes.
 |`Province.type`|`String`|State/Province type.|
 |`Province.cities`|`List<City>`|List of cities in State/Province.|
 
-### 09. City Object
+### City Object
 | Object | Type | Description |
 |--|--|--|
 |`City.id`|`int`|.|
 |`City.name`|`String`|name of city.|
 |`City.latLng`|`LatLng`|coordinate point in **decimal** form.|
 
-### 10. Geographical Object
+### Geographical Object
 | Object | Type | Description |
 |--|--|--|
 |`Geographical.Continents`|`Continents`|continents that country lies in.|
@@ -148,13 +152,13 @@ The Currencies data based on ISO 4217 languages codes.
 |`Geographical.region`|`String`|geographical region.|
 |`Geographical.subregion`|`String`|geographical sub-region.|
 |`Geographical.world_region`|`int`|geographical world region.|
-|`Geographical.region_code`|`String`|geographical sub-region numeric code .|
+|`Geographical.region_code`|`String`|geographical sub-region numeric code.|
 |`Geographical.subregion_code`|`LatLng`|geographical sub-region numeric code.|
 |`Geographical.landlocked`|`bool`|landlocked status.|
 |`Geographical.borders`|`Country`|land borders.|
 |`Geographical.independent`|`String`|independent status.|
   
-### 11. Extra Object
+### Extra Object
 | Object | Type | Description |
 |--|--|--|
 |`Extra.geonameid`|`String`|Geoname ID.|
@@ -174,13 +178,35 @@ The Currencies data based on ISO 4217 languages codes.
 |`Extra.ar5`|`String`|Fifth Assessment Report (AR5).|
 |`Extra.address_format`|`String`|Address format.|
 |`Extra.eu_member`|`String`|European Union Member.|
-|`Extra.vat_rates`|`String`|Value-Added Tax.|
 
-### 12. Population Object
+### Population Object
 | Object | Type | Description |
 |--|--|--|
 |`Population.count`|`int`|population number.|
 |`Population.worldPercentage`|`double`|country population of world population percentage.|
+
+### Demonym Object
+| Object | Type | Description |
+|--|--|--|
+|`Demonym.male`|`Map<Language, String>`|Name of males residents.|
+|`Demonym.female`|`Map<Language, String>`|Name of females residents.|
+
+### TimeZone Object
+| Object | Type | Description |
+|--|--|--|
+|`TimeZone.zoneName`|`Map<Language, String>`|Zone name.|
+|`TimeZone.gmtOffset`|`Map<Language, String>`|The time differs from Greenwich Mean Time.|
+|`TimeZone.gmtOffsetName`|`Map<Language, String>`|Greenwich Mean Time name.|
+|`TimeZone.abbreviation`|`Map<Language, String>`|Time zone abbreviation.|
+|`TimeZone.tzName`|`Map<Language, String>`|Time zone name.|
+
+### VATRate Object
+| Object | Type | Description |
+|--|--|--|
+|`VATRate.standard`|`double`|Standard VAT.|
+|`VATRate.reduced`|`List<double>`|Reduced rates.|
+|`VATRate.super_reduced`|`double`|Super reduced rates.|
+|`VATRate.parking`|`double`|VAT rate for parking.|
 
 
 ## Design goals and limitations
@@ -191,7 +217,7 @@ is for countires data like codes, names, capitals and geographical info and so o
 ## Usage
 getworld must be intiialized with ```intitailze``` function and use it once over all the project.
 ```intitailze``` retrive data to three List ```Countries```, ```Currencies``` and ```Languages```.
-and you can use all list properties over them like ```map```, ```forEach```, ```forEach```, ```where``` and ...
+You can use all list/map properties over them like ```map```, ```forEach```, ```forEach```, ```where``` and ...
 
 ```dart
 import  'package:getworld/getworld.dart';
@@ -202,6 +228,7 @@ print(Currencies.length);
 print(Languages.length);
 }
 ```
+
 ## Features and bugs
 Please file feature requests and bugs at the [issue tracker][tracker].
 [issue tracker](https://github.com/AmremadDev/getworld/issues)

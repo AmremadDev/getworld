@@ -1,40 +1,73 @@
 class Extra {
-  final int? geonameid;
-  final String? edgar;
-  final String? itu;
-  final String? marc;
-  final String? wmo;
-  final String? ds;
-  final String? fifa;
-  final String? fips;
+  ///Geoname ID.
+  final int geonameid;
+
+  ///Electronic Data Gathering, Analysis, and Retrieval system.
+  final String edgar;
+
+  ///Codes assigned by the International Telecommunications Union.
+  final String itu;
+
+  ///MAchine-Readable Cataloging codes from the Library of Congress.
+  final String marc;
+
+  ///Country abbreviations by the World Meteorological Organization.
+  final String wmo;
+
+  ///Distinguishing signs of vehicles in international traffic.
+  final String ds;
+
+  ///Codes assigned by the Fédération Internationale de Football Association.
+  final String fifa;
+
+  ///Codes from the U.S. Federal Information Processing Standard
+  final String fips;
+
+  ///Global Administrative Unit Layers from the Food and Agriculture Organization
   final int? gaul;
-  final String? ioc;
-  final String? cowc;
+
+  ///Codes assigned by the International Olympics Committee
+  final String ioc;
+
+  ///Correlates of War character
+  final String cowc;
+
+  ///Correlates of War numeric
   final int? cown;
+
+  /// Food and Agriculture Organization
   final int? fao;
+
+  ///International Monetary Fund
   final int? imf;
-  final String? ar5;
-  final String? address_format;
-  final String? eu_member;
-  
+
+  ///Fifth Assessment Report (AR5)
+  final String ar5;
+
+  ///Address forma
+  final String address_format;
+
+  ///European Union Member
+  final String eu_member;
+
   Extra({
-    this.geonameid,
-    this.edgar,
-    this.itu,
-    this.marc,
-    this.wmo,
-    this.ds,
-    this.fifa,
-    this.fips,
-    this.gaul,
-    this.ioc,
-    this.cowc,
-    this.cown,
-    this.fao,
-    this.imf,
-    this.ar5,
-    this.address_format,
-    this.eu_member,
+    required this.geonameid,
+    required this.edgar,
+    required this.itu,
+    required this.marc,
+    required this.wmo,
+    required this.ds,
+    required this.fifa,
+    required this.fips,
+    required this.gaul,
+    required this.ioc,
+    required this.cowc,
+    required this.cown,
+    required this.fao,
+    required this.imf,
+    required this.ar5,
+    required this.address_format,
+    required this.eu_member,
   });
 
   Map toJson() => {

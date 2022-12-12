@@ -1,15 +1,15 @@
-import 'latlng.dart';
+import './latlng.dart';
 
 class City {
   ///City name.
-  String? name;
+  final String name;
 
-  ///Described latitude and longitude coordinate points.
-  LatLng? latLng;
+  ///Latitude and Longitude coordinate points.
+  final LatLng latLng;
 
   City({
-    this.name,
-    this.latLng,
+    required this.name,
+    required this.latLng,
   });
-  Map toJson() => {"name": name, "latLng": latLng?.toJson()};
+  Map toJson() => {"name": name, "latLng": latLng.toJson()};
 }

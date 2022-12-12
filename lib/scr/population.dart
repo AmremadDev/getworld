@@ -1,14 +1,16 @@
 class Population {
+  ///Population number
+  final int count;
 
-  ///
-  final int? count;
+  ///Country population of world
+  final double worldPercentage;
 
-  ///
-  final double? worldPercentage;
-
-  Population({this.count, this.worldPercentage});
+  Population({
+    required this.count,
+    required this.worldPercentage,
+  });
   Map toJson() => {
-    "count": count, "worldPercentage": worldPercentage
-  };
+        "count": count,
+        "worldPercentage": worldPercentage,
+      };
 }
-
