@@ -6,12 +6,10 @@ void main() {
   Stopwatch stopwatch = Stopwatch()..start();
 
   GetWorld().initialize();
-  print(GetWorld.Countries.length);
-  print(GetWorld.Currencies.length);
-  print(GetWorld.Languages.length);
 
  _writeJsonFile (GetWorld.Countries , "d:/countries.json");
- 
+
+
 //   print(Countries[0].toJson());
 
 //   stopwatch.reset();

@@ -16,8 +16,7 @@ class Extra {
   final String? ar5;
   final String? address_format;
   final String? eu_member;
-  final String? vat_rates;
-
+  
   Extra({
     this.geonameid,
     this.edgar,
@@ -36,7 +35,6 @@ class Extra {
     this.ar5,
     this.address_format,
     this.eu_member,
-    this.vat_rates,
   });
 
   Map toJson() => {
@@ -57,6 +55,5 @@ class Extra {
         "ar5": ar5,
         "address_format": address_format,
         "eu_member": eu_member,
-        "vat_rates": vat_rates
       };
 }

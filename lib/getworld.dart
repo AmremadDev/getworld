@@ -6,6 +6,7 @@ import 'dart:developer' as developer;
 import 'package:getworld/data/curriences.dart';
 import 'package:getworld/data/countries.dart';
 import 'package:getworld/data/languages.dart';
+import 'package:getworld/scr/vat_rate.dart';
 
 import 'scr/city.dart';
 import 'scr/country.dart';
@@ -42,13 +43,13 @@ class GetWorld {
   ///
   ///[iso_3166_1_alpha2], [iso_3166_1_alpha3], [iso_3166_1_numeric], [name], [natives], [translations], [alt_spellings], [tld], [cioc], [status], [unMember],
   ///[Countries], [dialling], [capital], [geographical], [flag_symbol], [languages], [population], [extra], [provinces],[vat_rates], [cities]
-  static final  List<Country> Countries = [];
+  static final List<Country> Countries = [];
 
   ///[Currencies] list of Countries Currencies
   static final List<Currency> Currencies = [];
 
   ///[Languages] list of Countries Languages
- static final List<Language> Languages = [];
+  static final List<Language> Languages = [];
 
   static bool _loaded = false;
 
@@ -71,8 +72,7 @@ class GetWorld {
       if (languages == true) _initial_Languages();
       if (currencies == true) _initial_Currency();
       if (countires == true) _initialCountries();
-
-      developer.log("GetWorld initialized", name: "GetWorld");
+      _printLog("GetWorld initialized");
       _loaded = true;
     } else {
       assert(_loaded != true, "GetWorld is aready intialized");
@@ -98,11 +98,10 @@ class GetWorld {
       lng.name_in = Map<Language, List<String>?>.from(data
           .firstWhere((source) => source["iso_639_2_alpha3"] == lng.iso_639_2_alpha3)["name_in"]
           .map((key, value) => MapEntry<Language, List<String>?>(
-              Languages.firstWhere((element) => element.iso_639_2_alpha3 == key),
-              List<String>.from(value))));
+              Languages.firstWhere((element) => element.iso_639_2_alpha3 == key), List<String>.from(value))));
     }
 
-    developer.log("Languages initialized with ${Languages.length} object(s)", name: "GetWorld");
+    _printLog("Languages list loaded with ${Languages.length} object(s)");
   }
 
   void _initial_Currency() {
@@ -110,7 +109,7 @@ class GetWorld {
     //  List<dynamic> data = jsonDecode(await File("./jsons/currencies.json").readAsString());
     Currencies.addAll(List<Currency>.from(data.map((element) => Currency(
           iso_4217_code: element["iso_4217_code"],
-          iso_4217_numeric: element["iso_4217_numeric"].toString(),
+          iso_4217_numeric: element["iso_4217_numeric"],
           iso_4217_name: element["iso_4217_name"],
           iso_4217_minor_unit: element["iso_4217_minor_unit"],
           withdrawal_date: element["withdrawal_date"],
@@ -121,7 +120,8 @@ class GetWorld {
           symbol: element["symbol"],
           symbol_native: element["symbol_native"],
         ))));
-    developer.log("Currencies initialized with ${Currencies.length} object(s)", name: "GetWorld");
+
+    _printLog("Currencies list loaded with ${Currencies.length} object(s)");
   }
 
   void _initialCountries(
@@ -140,170 +140,177 @@ class GetWorld {
             iso_3166_1_alpha3: element["iso_3166_1_alpha3"],
             iso_3166_1_numeric: element["iso_3166_1_numeric"],
             cioc: element["cioc"],
-            name: _Name(element),
-            natives: _Natives(element),
-            alt_spellings:
-                (alt_spellings == false) ? null : List<String>.from(element["alt_spellings"]),
-              // translations:  _translations(element),
+            name: _Name(element["name"]),
+            natives: _Natives(element["natives"]),
+            alt_spellings: (alt_spellings == false) ? null : List<String>.from(element["alt_spellings"]),
+            // translations: _Translations(element["translations"]),
             capital: List<String>.from(element["capital"]),
             unMember: element["unMember"],
             status: element["status"],
-            flag_symbol: element["flag_symbol"],
             wikiLink: element["wikiLink"],
             emoji: element["emoji"],
-            emojiU: element["emojiU"] ,
-            demonyms: Demonym(
-            male: element["demonyms"]?.map<Language, String>((k, v) => MapEntry<Language, String>(
-                Languages.firstWhere((e) => e.iso_639_2_alpha3 == k.toUpperCase()),
-                v["m"].toString())),
-            famale: element["demonyms"]?.map<Language, String>((k, v) => MapEntry<Language, String>(
-                Languages.firstWhere((e) => e.iso_639_2_alpha3 == k.toUpperCase()),
-                v["f"].toString()))),
-            timezones:List<TimeZone>.from(element["timezones"].map((t) => TimeZone(
-              zoneName: t["zoneName"],
-              gmtOffset: t["gmtOffset"],
-              gmtOffsetName: t["gmtOffsetName"],
-              tzName: t["tzName"],
-              abbreviation: t["abbreviation"],
-            ))) ,
-            // vat_rates: ,
+            emojiU: element["emojiU"],
+            demonyms: _Demonym(element["demonyms"]),
+            timezones: _TimeZones(element["timezones"]),
+            vat_rates: _VAT_rates(element["vat_rates"]),
             tld: List<String>.from(element["tld"]),
-            dialling: (dialling == false) ? null : _Dialling(element),
-            population: (population == false) ? null : _Population(element),
-            extra: (extra == false) ? null : _Extra(element),
-            geographical: (geographical == false) ? null : _Geographical(element),
-            languages: (Languages.isEmpty) ? null : _Languages(element),
-            currencies: (Currencies.isEmpty) ? null : _Currencies(element),
-            provinces: (states == false) ? null : _States_Cities(element, cities)))
+            dialling: _Dialling(element["dialling"], dialling),
+            population: _Population(element["population"], population),
+            extra: _Extra(element["extra"], extra),
+            geographical: _Geographical(element["geographical"], geographical),
+            languages: _Languages(element["languages"]),
+            currencies: _Currencies(element["currencies"]),
+            provinces: _States_Cities(element["states"], states, cities)))
         .toList());
 
     //Fill borders
     for (var country in Countries) {
       country.geographical!.borders = data
-          .singleWhere((element) => element["iso_3166_1_alpha3"] == country.iso_3166_1_alpha3)[
-              "geographical"]["borders"]
+          .singleWhere((element) => element["iso_3166_1_alpha3"] == country.iso_3166_1_alpha3)["geographical"]
+              ["borders"]
           .map<Country>((b) => Countries.singleWhere((c) => c.iso_3166_1_alpha3 == b))
           .toList();
     }
 
-    developer.log("Countries initialized with ${Countries.length} object(s)", name: "GetWorld");
+    // print('\x1B[33m[GetWorld]: Countries initialized with ${Countries.length} object(s)');
+    _printLog("Countries list loaded with ${Countries.length} object(s)");
   }
 
-  List<Currency>? _Currencies(country) {
-    return country["currencies"]
-        .map<Currency>((cur) => Currencies.singleWhere((element) => element.iso_4217_code == cur))
+  VATRate? _VAT_rates(Map<String, dynamic>? country, [bool vat_rates = true]) {
+    if (vat_rates == false || country == null) return null;
+    return VATRate(
+      standard: country["standard"],
+      reduced: country["reduced"] == null ? null : List<double>.from(country["reduced"]),
+      super_reduced: country["super_reduced"],
+      parking: country["parking"],
+    );
+  }
+
+  List<Currency>? _Currencies(List<dynamic> country) {
+    if (Currencies.isEmpty || country.isEmpty) return null;
+    return country.map<Currency>((cur) => Currencies.singleWhere((element) => element.iso_4217_code == cur)).toList();
+  }
+
+  List<Language>? _Languages(List<dynamic> country) {
+    if (Languages.isEmpty) return null;
+    return country.map<Language>((lan) => Languages.singleWhere((element) => element.iso_639_2_alpha3 == lan)).toList();
+  }
+
+  List<TimeZone>? _TimeZones(List<dynamic>? country, [bool timezones = true]) {
+    if (timezones == false) return null;
+    return country
+        ?.map<TimeZone>((t) => TimeZone(
+              zoneName: t["zoneName"],
+              gmtOffset: t["gmtOffset"],
+              gmtOffsetName: t["gmtOffsetName"],
+              tzName: t["tzName"],
+              abbreviation: t["abbreviation"],
+            ))
         .toList();
   }
 
-  List<Language>? _Languages(country) {
-    return country["languages"]
-        .map<Language>((lan) => Languages.singleWhere((element) => element.iso_639_2_alpha3 == lan))
-        .toList();
+  Demonym? _Demonym(Map<String, dynamic> country, [bool demonyms = true]) {
+    return Demonym(
+      male: country["male"]?.map<Language, String>((k, v) =>
+          MapEntry<Language, String>(Languages.firstWhere((e) => e.iso_639_2_alpha3 == k.toUpperCase()), v.toString())),
+      female: country["female"]?.map<Language, String>((k, v) =>
+          MapEntry<Language, String>(Languages.firstWhere((e) => e.iso_639_2_alpha3 == k.toUpperCase()), v.toString())),
+    );
   }
 
-  List<Province>? _States_Cities(country, [bool cities = true]) {
-    return country["states"]
-        ?.map<Province>((s) => Province(
+  List<Province>? _States_Cities(List<dynamic>? country, [bool states = true, bool cities = true]) {
+    if (states == false || country == null) return null;
+    return country
+        .map<Province>((s) => Province(
               name: s["name"],
               state_code: s["state_code"],
               type: s["type"],
-              latLng: LatLng(latitude: s["latitude"], longitude: s["longitude"]),
+              latLng: LatLng(latitude: s["latLng"]["latitude"], longitude: s["latLng"]["longitude"]),
               cities: (cities == false)
                   ? null
                   : s["cities"]
                       ?.map<City>((c) => City(
                             name: c["name"],
-                            latLng: LatLng(latitude: c["latitude"], longitude: c["longitude"]),
+                            latLng: LatLng(latitude: c["latLng"]["latitude"], longitude: c["latLng"]["longitude"]),
                           ))
                       .toList(),
             ))
         .toList();
   }
 
-  Map<Language, Name>? _translations(dynamic country) {
+  Map<Language, Name>? _Translations(Map<String, dynamic> country) {
     if (country == null || Languages.isEmpty) return null;
-    print(country["translations"].keys);
-    return Map<Language, Name>.from(country["translations"].map<Language, Name>((key, value) =>
-        MapEntry<Language, Name>(
-            Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),
-            Name(official: value["official"], common: value["common"]))));
+    print(country.keys);
+    return Map<Language, Name>.from(country.map<Language, Name>((key, value) => MapEntry<Language, Name>(
+        Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),
+        Name(official: value["official"], common: value["common"]))));
   }
 
-  Map<Language, Name>? _Natives(dynamic country) {
-    if (country == null || Languages.isEmpty) return null;
-    return Map<Language, Name>.from(country["natives"].map<Language, Name>((key, value) =>
-        MapEntry<Language, Name>(
-            Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),
-            Name(official: value["official"], common: value["common"]))));
+  Map<Language, Name>? _Natives(Map<String, dynamic> country) {
+    if (Languages.isEmpty) return null;
+    return Map<Language, Name>.from(country.map<Language, Name>((key, value) => MapEntry<Language, Name>(
+        Languages.firstWhere((element) => element.iso_639_2_alpha3 == key.toUpperCase()),
+        Name(official: value["official"], common: value["common"]))));
   }
 
-  Dialling _Dialling(country) {
-    return Dialling(
-        calling_code: country["dialling"]["calling_code"],
-        national_number_lengths: country["dialling"]["national_number_lengths"]);
+  Dialling? _Dialling(Map<String, dynamic> country, [bool dialling = true]) {
+    if (dialling == false) return null;
+    return Dialling(calling_code: country["calling_code"], national_number_lengths: country["national_number_lengths"]);
   }
 
-  Population _Population(country) {
-    return Population(
-        count: country["population"]["count"],
-        worldPercentage: country["population"]["worldPercentage"]);
+  Population? _Population(Map<String, dynamic> country, [bool population = true]) {
+    if (population == false) return null;
+    return Population(count: country["count"], worldPercentage: country["worldPercentage"]);
   }
 
-  Name _Name(dynamic country) {
+  Name _Name(Map<String, dynamic> country) {
     return Name(
-      official: country["name"]["official"],
-      common: country["name"]["common"],
+      official: country["official"],
+      common: country["common"],
     );
   }
 
-  Extra _Extra(dynamic country) {
+  Extra? _Extra(Map<String, dynamic> country, [bool extra = true]) {
+    if (extra == false) return null;
     return Extra(
-      geonameid: country["extra"]["geonameid"],
-      edgar: country["extra"]["edgar"].toString(),
-      itu: country["extra"]["itu"].toString(),
-      marc: country["extra"]["marc"].toString(),
-      wmo: country["extra"]["wmo"].toString(),
-      ds: country["extra"]["ds"].toString(),
-      fifa: country["extra"]["fifa"].toString(),
-      fips: country["extra"]["fips"].toString(),
-      gaul: country["extra"]["gaul"],
-      ioc: country["extra"]["ioc"].toString(),
-      cowc: country["extra"]["cowc"].toString(),
-      cown: country["extra"]["cown"],
-      fao: country["extra"]["fao"],
-      imf: country["extra"]["imf"],
-      ar5: country["extra"]["ar5"].toString(),
-      address_format: country["extra"]["address_format"],
-      eu_member: country["extra"]["eu_member"].toString(),
+      geonameid: country["geonameid"],
+      edgar: country["edgar"].toString(),
+      itu: country["itu"].toString(),
+      marc: country["marc"].toString(),
+      wmo: country["wmo"].toString(),
+      ds: country["ds"].toString(),
+      fifa: country["fifa"].toString(),
+      fips: country["fips"].toString(),
+      gaul: country["gaul"],
+      ioc: country["ioc"].toString(),
+      cowc: country["cowc"].toString(),
+      cown: country["cown"],
+      fao: country["fao"],
+      imf: country["imf"],
+      ar5: country["ar5"].toString(),
+      address_format: country["address_format"],
+      eu_member: country["eu_member"].toString(),
     );
   }
 
-  Geographical _Geographical(dynamic country) {
+  Geographical? _Geographical(dynamic country, [bool geographical = true]) {
+    if (geographical == false) return null;
     return Geographical(
-      latLng_dms: LatLng(
-          latitude: country["geographical"]["latLng_dmc"]["latitude"],
-          longitude: country["geographical"]["latLng_dmc"]["longitude"]),
-      latLng_dec: LatLng(
-          latitude: country["geographical"]["latLng_dec"]["latitude"],
-          longitude: country["geographical"]["latLng_dec"]["longitude"]),
-      latLng_max: LatLng(
-          latitude: country["geographical"]["latLng_min"]["latitude"],
-          longitude: country["geographical"]["latLng_min"]["longitude"]),
-      latLng_min: LatLng(
-          latitude: country["geographical"]["latLng_max"]["latitude"],
-          longitude: country["geographical"]["latLng_max"]["longitude"]),
-      area: country["geographical"]["area"].toDouble(),
-      region: country["geographical"]["region"],
-      subregion: country["geographical"]["subregion"],
-      region_code: country["geographical"]["region_code"],
-      subregion_code: country["geographical"]["subregion_code"],
-      postal_code: country["geographical"]["postal_code"],
-      world_region: country["geographical"]["world_region"],
-      landlocked: country["geographical"]["landlocked"],
-      independent: country["geographical"]["independent"],
-      continent: country["geographical"]["continent"]
-          .map<Continents>(
-              (element) => Continents.values.singleWhere((continent) => element == continent.value))
+      latLng_dms: LatLng(latitude: country["latLng_dmc"]["latitude"], longitude: country["latLng_dmc"]["longitude"]),
+      latLng_dec: LatLng(latitude: country["latLng_dec"]["latitude"], longitude: country["latLng_dec"]["longitude"]),
+      latLng_max: LatLng(latitude: country["latLng_min"]["latitude"], longitude: country["latLng_min"]["longitude"]),
+      latLng_min: LatLng(latitude: country["latLng_max"]["latitude"], longitude: country["latLng_max"]["longitude"]),
+      area: country["area"].toDouble(),
+      region: country["region"],
+      subregion: country["subregion"],
+      region_code: country["region_code"],
+      subregion_code: country["subregion_code"],
+      postal_code: country["postal_code"],
+      world_region: country["world_region"],
+      landlocked: country["landlocked"],
+      independent: country["independent"],
+      continent: country["continent"]
+          .map<Continents>((element) => Continents.values.singleWhere((continent) => element == continent.value))
           .toList(),
     );
   }
@@ -316,5 +323,9 @@ class GetWorld {
   // void _printJson(Object object) {
   //   print(JsonEncoder.withIndent("  ").convert(object));
   // }
+
+  void _printLog(String message){
+   print('\x1B[2m\x1B[33m[GetWorld]:\x1B[0m\x1B[33m $message\x1B[0m');
+  }
 
 }

@@ -70,8 +70,6 @@ class Country {
   /// Geographical informations.
   Geographical? geographical;
 
-  String? flag_symbol;
-
   ///List of official languages.
   List<Language>? languages;
 
@@ -100,7 +98,8 @@ class Country {
   Demonym? demonyms;
 
   ///Relative link to country wikipedia page
-  String? wikiLink = "";
+  String wikiLink;
+
   Country({
     required this.iso_3166_1_alpha2,
     required this.iso_3166_1_alpha3,
@@ -117,7 +116,6 @@ class Country {
     this.currencies,
     this.dialling,
     this.geographical,
-    this.flag_symbol,
     this.languages,
     this.population,
     this.extra,
@@ -126,11 +124,12 @@ class Country {
     this.timezones,
     this.emoji,
     this.emojiU,
-    this.wikiLink,
+    this.wikiLink = "",
     this.demonyms,
   });
 
-  Map toJson() => {
+  Map toJson() {
+    return {
         "iso_3166_1_alpha2": iso_3166_1_alpha2,
         "iso_3166_1_alpha3": iso_3166_1_alpha3,
         "iso_3166_1_numeric": iso_3166_1_numeric,
@@ -138,7 +137,6 @@ class Country {
         "alt_spellings": alt_spellings,
         "natives": natives?.map((key, value) => MapEntry(key.iso_639_2_alpha3, value)),
         "translations": translations?.map((key, value) => MapEntry(key.iso_639_2_alpha3, value)),
-        "flag_symbol": flag_symbol,
         "emoji": emoji,
         "emojiU": emojiU,
         "cioc": cioc,
@@ -147,8 +145,8 @@ class Country {
         "tld": tld,
         "unMember": unMember,
         "timezones": timezones,
-        // "demonyms": demonyms,
-        "currencies": List<String>.from(currencies!.map((e) => e.iso_4217_code)),
+        "demonyms": demonyms,
+          "currencies": currencies == null ? null :List<String>.from(currencies!.map((e) => e.iso_4217_code)),
         "dialling": dialling?.toJson(),
         "geographical": geographical?.toJson(),
         "languages": List<String>.from(languages!.map((e) => e.iso_639_2_alpha3)),
@@ -156,6 +154,7 @@ class Country {
         "extra": extra?.toJson(),
         "wikiLink": wikiLink,
         "vat_rates": vat_rates,
-        // "states": provinces?.map((e) => e.toJson()).toList(),
+        "states": provinces?.map((e) => e.toJson()).toList(),
       };
+  }
 }
