@@ -1,15 +1,26 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:getworld/getworld.dart';
+import 'dart:developer' as developer;
 
-void main() {
+import 'package:intl/intl.dart';
+
+// https://pub.dev/packages/vm_service
+import 'package:vm_service/vm_service.dart' show MemoryUsage, VM, VmService;
+import 'package:vm_service/vm_service_io.dart' show vmServiceConnectUri;
+
+void main() async {
   Stopwatch stopwatch = Stopwatch()..start();
 
   GetWorld().initialize();
-
+  print(GetWorld.Countries.toJson());
+  print(GetWorld.Languages);
+  print(GetWorld.Currencies);
  _writeJsonFile (GetWorld.Countries , "d:/countries.json");
 
-
+// printHeapUsage();
+// printHeapUsage();
 //   print(Countries[0].toJson());
 
 //   stopwatch.reset();
@@ -41,4 +52,28 @@ void _writeJsonFile( Object object, String path) {
   final File file = File(path);
   file.writeAsStringSync(json.encode(object));
   print("${object.runtimeType} exported at $path");
+}
+
+
+
+
+
+Future<void> printHeapUsage() async {
+  MemoryUsage mem = await getMemoryUsage();
+  print(NumberFormat.compact().format(mem.heapUsage));
+}
+
+Future<MemoryUsage> getMemoryUsage() async {
+  developer.ServiceProtocolInfo info = await developer.Service.getInfo();
+  VmService service =
+      await vmServiceConnectUri(info.serverWebSocketUri.toString());
+  VM vm = await service.getVM();
+  String? isolateId = vm.isolates?.first.id;
+  MemoryUsage mem;
+  if (isolateId == null) {
+    mem = MemoryUsage(externalUsage: 0, heapCapacity: 0, heapUsage: 0);
+  } else {
+    mem = await service.getMemoryUsage(isolateId);
+  }
+  return mem;
 }

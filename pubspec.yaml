@@ -10,4 +10,6 @@ dev_dependencies:
   lints: ^2.0.0
 dependencies:
   collection: ^1.17.0
+  intl: ^0.17.0
+  vm_service: ^9.4.0
 
