@@ -5,11 +5,10 @@ homepage: https://github.com/AmremadDev/getworld
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
-
+  
 dev_dependencies:
   lints: ^2.0.0
 dependencies:
   collection: ^1.17.0
-  intl: ^0.17.0
-  vm_service: ^9.4.0
+
 
