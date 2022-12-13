@@ -6,3 +6,6 @@
 
 ## 1.1.0
 - Initial version.
+
+## 1.1.1
+- README.md fixed.
