@@ -2,13 +2,13 @@
   <img src="https://github.com/AmremadDev/getworld/blob/master/logo/logo.png?raw=true" alt="Sublime's custom image"/>
 </p>
 
-# getworld 1.1.0
+# getworld 1.1.1
 Simple package for getting countries, currenices and languages information.
 
 ## Table of Contents
-- [getworld 1.1.0](#getworld-110)
+- [getworld 1.1.1](#getworld-111)
   - [Table of Contents](#table-of-contents)
-    - [nstallation](#nstallation)
+    - [Installation](#installation)
     - [Country Object](#country-object)
     - [Language Object](#language-object)
     - [Currency Object](#currency-object)
@@ -27,7 +27,7 @@ Simple package for getting countries, currenices and languages information.
     - [Features and bugs](#features-and-bugs)
   - [References](#references)
 
-### nstallation
+### Installation
 Run this command:
 With Dart:
 ```shell
@@ -40,7 +40,7 @@ With Flutter:
 This will add a line like this to your package's pubspec.yaml (and run an implicit  `dart pub get`):
 ```yaml
 dependencies:
-  getworld: ^1.1.0
+  getworld: ^1.1.1
 ```
 Alternatively, your editor might support  `dart pub get`  or  `flutter pub get`. Check the docs for your editor to learn more.
 
@@ -194,11 +194,11 @@ The Currencies data based on ISO 4217 languages codes.
 ### TimeZone Object
 | Object                   | Type                    | Description                                |
 | ------------------------ | ----------------------- | ------------------------------------------ |
-| `TimeZone.zoneName`      | `Map<Language, String>` | Zone name.                                 |
-| `TimeZone.gmtOffset`     | `Map<Language, String>` | The time differs from Greenwich Mean Time. |
-| `TimeZone.gmtOffsetName` | `Map<Language, String>` | Greenwich Mean Time name.                  |
-| `TimeZone.abbreviation`  | `Map<Language, String>` | Time zone abbreviation.                    |
-| `TimeZone.tzName`        | `Map<Language, String>` | Time zone name.                            |
+| `TimeZone.zoneName`      | `String` | Zone name.                                 |
+| `TimeZone.gmtOffset`     | `int` | The time differs from Greenwich Mean Time. |
+| `TimeZone.gmtOffsetName` | `String` | Greenwich Mean Time name.                  |
+| `TimeZone.abbreviation`  | `String` | Time zone abbreviation.                    |
+| `TimeZone.tzName`        | `String` | Time zone name.                            |
 
 ### VATRate Object
 | Object                  | Type           | Description           |
