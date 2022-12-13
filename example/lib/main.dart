@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:getworld/getworld.dart';
 
 void main() async {
@@ -36,9 +34,4 @@ void main() async {
   print('Countries.where executed  in ${stopwatch.elapsed.inMilliseconds} Milliseconds\n');
 }
 
-// ignore: unused_element
-void _writeJsonFile(Object object, String path) {
-  final File file = File(path);
-  file.writeAsStringSync(json.encode(object));
-  print("${object.runtimeType} exported at $path");
-}
+
