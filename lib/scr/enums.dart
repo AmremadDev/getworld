@@ -8,6 +8,6 @@ enum Continents {
   South_America("SA", "South America");
 
   const Continents(this.value, this.name);
-  final String? name;
+  final String name;
   final String value;
 }
