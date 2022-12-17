@@ -8,4 +8,5 @@
 - Initial version.
 
 ## 1.1.1
-- README.md fixed.
+- README.md modified.
+- Performance 

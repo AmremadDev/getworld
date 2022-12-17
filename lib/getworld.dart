@@ -2,9 +2,15 @@
 library getworld;
 
 import 'dart:convert';
-import './data/curriences.dart';
+// import './data/curriences.dart';
+// import './data/countries.dart';
+// import './data/languages.dart';
+import 'package:getworld/data/countries_data.dart';
+
 import './data/countries.dart';
-import './data/languages.dart';
+import './data/languages_data.dart';
+import './data/curriences_data.dart';
+
 import './scr/vat_rate.dart';
 
 import './scr/city.dart';
@@ -75,7 +81,7 @@ class GetWorld {
     if (_loaded == false) {
       if (languages == true) {
         // List<dynamic> data = jsonDecode(await File("packages/getworld/jsons/languages.json").readAsString());
-        List<dynamic> data = jsonDecode(jsonLanguanges());
+        List<Map<String, dynamic>> data = languangesData();
 
         // wirtting main languange informations
         Languages.addAll(data.map((element) => Language(
@@ -98,7 +104,7 @@ class GetWorld {
         _printLog("Languages list loaded with ${Languages.length} object(s)");
       }
       if (currencies == true) {
-        List<dynamic> data = jsonDecode(jsonCurriences());
+        List<dynamic> data = curriencesData();
         //  List<dynamic> data = jsonDecode(await File("./jsons/currencies.json").readAsString());
         Currencies.addAll(List<Currency>.from(data.map((element) => Currency(
               iso_4217_code: element["iso_4217_code"],
@@ -118,7 +124,7 @@ class GetWorld {
       }
       if (countires == true) {
         // List<dynamic> data = jsonDecode(await File("./jsons/data_compact.json").readAsString());
-        List<dynamic> data = jsonDecode(jsonCountries());
+        List<dynamic> data = countriesData();
 
         Countries.addAll(data
             .map<Country>((element) => Country(
@@ -135,7 +141,7 @@ class GetWorld {
                   emoji: element["emoji"],
                   emojiU: element["emojiU"],
 
-                  natives: (languages == false) ? null : _Natives(element["natives"]),
+                  natives: (languages == false || element["natives"].length == 0) ? null : _Natives(element["natives"]),
                   alt_spellings: (alt_spellings == false) ? null : List<String>.from(element["alt_spellings"]),
                   translations: _Translations(element["translations"]),
 
@@ -155,8 +161,7 @@ class GetWorld {
         //Fill borders
         for (var country in Countries) {
           country.geographical?.borders.addAll(data
-              .singleWhere((element) => element["iso_3166_1_alpha3"] == country.iso_3166_1_alpha3)["geographical"]
-                  ["borders"]
+              .singleWhere((element) => element["iso_3166_1_alpha3"] == country.iso_3166_1_alpha3)["geographical"]["borders"]
               .map<Country>((b) => Countries.singleWhere((c) => c.iso_3166_1_alpha3 == b))
               .toList());
         }
@@ -206,10 +211,10 @@ class GetWorld {
   Demonym? _Demonym(Map<String, dynamic>? country) {
     if (country == null) return null;
     return Demonym(
-      male: country["male"]?.map<Language, String>((k, v) =>
-          MapEntry<Language, String>(Languages.firstWhere((e) => e.iso_639_2_alpha3 == k.toUpperCase()), v.toString())),
-      female: country["female"]?.map<Language, String>((k, v) =>
-          MapEntry<Language, String>(Languages.firstWhere((e) => e.iso_639_2_alpha3 == k.toUpperCase()), v.toString())),
+      male: country["male"]?.map<Language, String>(
+          (k, v) => MapEntry<Language, String>(Languages.firstWhere((e) => e.iso_639_2_alpha3 == k.toUpperCase()), v.toString())),
+      female: country["female"]?.map<Language, String>(
+          (k, v) => MapEntry<Language, String>(Languages.firstWhere((e) => e.iso_639_2_alpha3 == k.toUpperCase()), v.toString())),
     );
   }
 
@@ -299,14 +304,10 @@ class GetWorld {
   Geographical? _Geographical(dynamic country, [bool geographical = true]) {
     if (geographical == false) return null;
     return Geographical(
-      latLng_dms: LatLng(
-          latitude: country["latLng_dmc"]["latitude"] ?? "", longitude: country["latLng_dmc"]["longitude"] ?? ""),
-      latLng_dec: LatLng(
-          latitude: country["latLng_dec"]["latitude"] ?? "", longitude: country["latLng_dec"]["longitude"] ?? ""),
-      latLng_max: LatLng(
-          latitude: country["latLng_min"]["latitude"] ?? "", longitude: country["latLng_min"]["longitude"] ?? ""),
-      latLng_min: LatLng(
-          latitude: country["latLng_max"]["latitude"] ?? "", longitude: country["latLng_max"]["longitude"] ?? ""),
+      latLng_dms: LatLng(latitude: country["latLng_dmc"]["latitude"] ?? "", longitude: country["latLng_dmc"]["longitude"] ?? ""),
+      latLng_dec: LatLng(latitude: country["latLng_dec"]["latitude"] ?? "", longitude: country["latLng_dec"]["longitude"] ?? ""),
+      latLng_max: LatLng(latitude: country["latLng_min"]["latitude"] ?? "", longitude: country["latLng_min"]["longitude"] ?? ""),
+      latLng_min: LatLng(latitude: country["latLng_max"]["latitude"] ?? "", longitude: country["latLng_max"]["longitude"] ?? ""),
       area: country["area"].toDouble(),
       region: country["region"],
       subregion: country["subregion"],
