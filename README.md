@@ -4,7 +4,12 @@
 
 # getworld 1.1.1
 Simple package for getting countries, currenices and languages information.
-
+Simple package to display list of world wide Countries, currenices and languages informations.
+ - allows to get english names, natives names and it's names translations.
+ - allows to get a list of States and Cities depends on given country.
+ - allows to get dilaing inforamtion like dial code and maxmum phone list.
+ - allows to get some geographical data like latitude and longitude.
+ - ...
 ## Table of Contents
 - [getworld 1.1.1](#getworld-111)
   - [Table of Contents](#table-of-contents)
